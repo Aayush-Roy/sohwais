@@ -339,6 +339,9 @@ export default function App() {
       />
       <ArtisanSection onCraftsmanshipClick={navigateToCraftsmanship} />
       <CraftsmanshipSection />
+       <div>
+       <TraditionalProducts/>
+      </div>
       <ExperienceFooterWrapper>
         <ExperienceSection onCollectionClick={navigateToCollections} />
         <Footer 
@@ -359,14 +362,13 @@ export default function App() {
         isTransitioning={isTransitioning}
         clickPosition={clickPosition}
       />
+     
       <LoadingAnimation
         show={showLoading}
         onComplete={handleLoadingComplete}
         hasLoadedBefore={hasLoadedBefore}
       />
-      <div>
-       <TraditionalProducts/>
-      </div>
+      
     </div>
   );
 }
