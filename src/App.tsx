@@ -344,10 +344,10 @@ export default function App() {
        <div>
        <TraditionalProducts/>
       </div>
-      <div>
+      {/* <div>
         <CollectionCard/>
         <GenderCollections/>
-      </div>
+      </div> */}
      
       <ExperienceFooterWrapper>
         <ExperienceSection onCollectionClick={navigateToCollections} />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Users, ArrowRight, Star, Heart } from 'lucide-react';
 
 interface Stats {
@@ -20,7 +20,7 @@ interface Collection {
 const API_BASE_URL = "https://sohwais-be.onrender.com/api";
 
 const GenderCollections = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [stats, setStats] = useState<Stats>({ men: 0, women: 0, total: 0 });
   const [loading, setLoading] = useState<boolean>(true);
 
