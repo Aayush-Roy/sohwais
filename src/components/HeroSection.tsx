@@ -131,7 +131,7 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.4 }}
           >
-            HERITAGE 2025
+            HERITAGE 2026
           </motion.h1>
           <motion.p 
             className="text-[#fdfcf9]/80 text-[11px] sm:text-[12px] md:text-[13px] tracking-[1.5px] sm:tracking-[1.8px] mb-8 sm:mb-10 font-['Cormorant_Garamond',serif] italic drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
