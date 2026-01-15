@@ -46,7 +46,8 @@ interface ProductResponse {
 
 export const fetchProducts = async (): Promise<ProductResponse> => {
   try {
-    const res = await fetch("https://sohwais-be.onrender.com/api/products");
+    // const res = await fetch("https://sohwais-be.onrender.com/api/products");
+    const res = await fetch("http://srv1272370.hstgr.cloud:5000/api/products");
     console.log("API Response:", res);
     
     if (!res.ok) {

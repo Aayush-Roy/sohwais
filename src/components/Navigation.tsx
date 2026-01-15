@@ -128,7 +128,7 @@ export function Navigation({ cartCount = 0, onCartClick, mode = 'auto', onCollec
               >
                 CRAFTSMANSHIP
               </button>
-              <a 
+              {/* <a 
                 href="#contact" 
                 className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] drop-shadow-md after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 hover:after:w-full ${
                   isOverDarkBackground
@@ -138,7 +138,7 @@ export function Navigation({ cartCount = 0, onCartClick, mode = 'auto', onCollec
                 role="listitem"
               >
                 CONTACT
-              </a>
+              </a> */}
             </div>
           </nav>
           
