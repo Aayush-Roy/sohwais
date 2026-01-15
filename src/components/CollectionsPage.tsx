@@ -241,6 +241,14 @@ export function CollectionsPage({
 
   const collections = [
     {
+      id: 7,
+      name: 'Explore All Designs',
+      description: 'Discover our complete range of heritage-inspired collections',
+      imageUrl: ExploreAll,
+      textTheme: 'dark',
+      isExploreAll: true // नया flag add करें
+    },
+    {
       id: 1,
       name: 'Madhubani Collection',
       description: 'Traditional folk art from Bihar, featuring intricate geometric patterns and vibrant colors',
@@ -282,14 +290,7 @@ export function CollectionsPage({
       imageUrl: Batik,
       textTheme: 'dark'
     },
-    {
-      id: 7,
-      name: 'Explore More Designs',
-      description: 'Discover our complete range of heritage-inspired collections',
-      imageUrl: ExploreAll,
-      textTheme: 'dark',
-      isExploreAll: true // नया flag add करें
-    }
+    
   ];
 
   const handleCollectionClick = (collectionName: string, isExploreAll = false) => {

@@ -39,6 +39,7 @@ export function CollectionSection({ onMensClick, onWomensClick }: CollectionSect
   return (
     <section id="collection" className="relative h-screen w-full overflow-hidden bg-white" ref={sectionRef}>
       <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+        
         {/* Men's Collection */}
         <motion.div 
           className="relative overflow-hidden group"

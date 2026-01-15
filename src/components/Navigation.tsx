@@ -347,7 +347,7 @@ export function Navigation({ cartCount = 0, onCartClick, mode = 'auto', onCollec
                 >
                   CRAFTSMANSHIP
                 </button>
-                <a 
+                {/* <a 
                   href="#contact" 
                   className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:backdrop-blur-sm block ${
                     isOverDarkBackground
@@ -357,7 +357,7 @@ export function Navigation({ cartCount = 0, onCartClick, mode = 'auto', onCollec
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   CONTACT
-                </a>
+                </a> */}
               </motion.div>
             </nav>
           </motion.div>

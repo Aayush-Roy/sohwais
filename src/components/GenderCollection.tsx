@@ -17,7 +17,7 @@ interface Collection {
   buttonColor: string;
 }
 
-const API_BASE_URL = "https://sohwais-be.onrender.com/api";
+const API_BASE_URL = "https://api.sohwais.com/api";
 
 const GenderCollections = () => {
   // const navigate = useNavigate();
