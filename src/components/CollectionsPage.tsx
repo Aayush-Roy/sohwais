@@ -8,7 +8,11 @@ import { CartItem } from './ProductDetailPage';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import sujiniImage from 'figma:asset/e37c21e18c80f50d0761f06ff1f74b7584fa5c4d.png';
 import madhubaniImage from 'figma:asset/8e00dae59cdb318d9b4b0dadd5a79db9c070c991.png';
-
+import ExploreAll from "../assets/Explore_all.png";
+import Marble from "../assets/Marble(TN).png";
+import Nakasi from "../assets/nakasi.png";
+import Majestic from "../assets/majestic.jpeg";
+import Batik from "../assets/Bartik(TN).png";
 interface CollectionsPageProps {
   onBack: (event?: React.MouseEvent) => void;
   cartCount: number;
@@ -41,30 +45,35 @@ export function CollectionsPage({ onBack, cartCount, onCartClick, onAddToCart, o
       id: 3,
       name: 'Marble Collection',
       description: 'Inspired by the timeless elegance of marble artistry and craftsmanship',
+      imageUrl:Marble ,
       textTheme: 'dark' // dark text for plain background
     },
     {
       id: 4,
       name: 'Nakashi Collection',
       description: 'Exquisite hand-painted designs showcasing intricate artistic details',
+      imageUrl:Nakasi,
       textTheme: 'dark' // dark text for plain background
     },
     {
       id: 5,
       name: 'Majestic Linen',
       description: 'Premium linen crafted with heritage techniques, offering timeless comfort and elegance',
+      imageUrl:Majestic,
       textTheme: 'dark' // dark text for plain background
     },
     {
       id: 6,
       name: 'The Batik Archive',
       description: 'Ancient wax-resist dyeing tradition creating mesmerizing patterns and rich textures',
+      imageUrl:Batik,
       textTheme: 'dark' // dark text for plain background
     },
     {
       id: 7,
       name: 'Explore More Designs',
       description: 'Discover our complete range of heritage-inspired collections',
+      imageUrl:ExploreAll,
       textTheme: 'dark' // dark text for plain background
     }
   ];
