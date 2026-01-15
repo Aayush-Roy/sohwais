@@ -754,10 +754,10 @@ export default function App() {
           />
         </div>
       </div>
-      <CollectionSection 
+      {/* <CollectionSection 
         onMensClick={navigateToMensCollections}
         onWomensClick={navigateToWomensCatalogue}
-      />
+      /> */}
       <ArtisanSection onCraftsmanshipClick={navigateToCraftsmanship} />
       <CraftsmanshipSection />
       {/* <div>

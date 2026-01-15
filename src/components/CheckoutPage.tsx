@@ -715,7 +715,8 @@ import {
   RefreshCw
 } from 'lucide-react';
 
-const API_BASE_URL = "https://sohwais-be.onrender.com/api";
+// const API_BASE_URL = "https://sohwais-be.onrender.com/api";
+const API_BASE_URL = "https://api.sohwais.com/api";
 
 interface CartItem {
   id: string;
