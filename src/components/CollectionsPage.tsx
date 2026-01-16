@@ -256,6 +256,13 @@ export function CollectionsPage({
       textTheme: 'dark'
     },
     {
+      id: 5,
+      name: 'Majestic Linen',
+      description: 'Premium linen crafted with heritage techniques, offering timeless comfort and elegance',
+      imageUrl: Majestic,
+      textTheme: 'dark'
+    },
+    {
       id: 2,
       name: 'Sujini Collection',
       description: 'Delicate running stitch embroidery creating beautiful quilted textures',
@@ -276,13 +283,7 @@ export function CollectionsPage({
       imageUrl: Nakasi,
       textTheme: 'dark'
     },
-    {
-      id: 5,
-      name: 'Majestic Linen',
-      description: 'Premium linen crafted with heritage techniques, offering timeless comfort and elegance',
-      imageUrl: Majestic,
-      textTheme: 'dark'
-    },
+    
     {
       id: 6,
       name: 'The Batik Archive',

@@ -986,12 +986,12 @@ export function ProductDetailPage({
                   <label className="text-[12px] sm:text-[13px] tracking-[1.5px] font-['Cormorant_Garamond',serif] text-[#2c1810] uppercase">
                     Select Size
                   </label>
-                  <button
+                  {/* <button
                     onClick={() => setShowSizeGuide(!showSizeGuide)}
                     className="text-[10px] sm:text-[11px] tracking-[1px] text-[#c9a060] hover:underline font-['Cormorant_Garamond',serif] uppercase"
                   >
                     Size Guide
-                  </button>
+                  </button> */}
                 </div>
 
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
@@ -1016,7 +1016,7 @@ export function ProductDetailPage({
                     <h3 className="text-[14px] sm:text-[16px] tracking-[1.5px] font-['Cinzel_Decorative',serif] text-[#2c1810] mb-4">
                       Size Guide (Indian Standards)
                     </h3>
-                    {/* Size guide content remains same */}
+                  
                   </div>
                 )}
               </div>
