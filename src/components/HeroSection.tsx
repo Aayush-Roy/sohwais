@@ -174,7 +174,7 @@
 //   );
 // }
 import { ChevronDown } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   motion,
   useScroll,
@@ -241,6 +241,20 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
       setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
     }, 1000);
   };
+
+  // const getProducts=async()=>{
+  //   try{
+  //     const res = await fetch("https://api.sohwais.com/api/products?limit=100");
+  //     const data = await res.json();
+  //     console.log(data);
+  //   }catch(err){
+  //     console.log(err);
+  //   }
+  // }
+  // useEffect(()=>{
+  //   getProducts();
+  // },[])
+
 
   return (
     <section
