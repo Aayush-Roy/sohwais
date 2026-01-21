@@ -1253,6 +1253,7 @@ export function OurCollectionPage({
 
   return (
     <div className="min-h-screen bg-[#fdfcf9]">
+      
       <div className="fixed top-0 left-0 right-0 z-40">
         <Navigation 
           cartCount={cartCount} 
