@@ -676,13 +676,20 @@ export function ProductDetailPage({
 
           {/* Tab Content */}
           <div className="bg-white rounded-lg p-6 sm:p-8 shadow-md">
-            {activeTab === 'description' && (
+            {/* {activeTab === 'description' && (
               <div className="space-y-4 sm:space-y-6">
                 <p className="text-[14px] sm:text-[15px] md:text-[16px] leading-[24px] sm:leading-[26px] md:leading-[28px] tracking-[0.3px] sm:tracking-[0.4px] md:tracking-[0.5px] font-['Cormorant_Garamond',serif] text-[#2c1810]">
                   {product.description || 'No description available.'}
                 </p>
               </div>
-            )}
+            )} */}
+            {activeTab === 'description' && (
+  <div className="space-y-4 sm:space-y-6">
+    <p className="whitespace-pre-line text-[14px] sm:text-[15px] md:text-[16px] leading-[24px] sm:leading-[26px] md:leading-[28px] tracking-[0.3px] sm:tracking-[0.4px] md:tracking-[0.5px] font-['Cormorant_Garamond',serif] text-[#2c1810]">
+      {product.description || 'No description available.'}
+    </p>
+  </div>
+)}
 
             {activeTab === 'features' && (
               <div className="space-y-4">
