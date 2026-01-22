@@ -484,7 +484,7 @@ export function Navigation({
             : 'bg-[#2c1810]/10 border-[#2c1810]/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
       }`}>
         {/* Logo - Now with proper click handler */}
-        <button 
+        {/* <button 
           onClick={handleLogoClick}
           className="focus:outline-none focus:ring-2 focus:ring-[#c9a060] focus:ring-offset-2 focus:ring-offset-transparent rounded-md transition-all hover:opacity-80"
           aria-label="Sohwais Threads Home"
@@ -494,8 +494,27 @@ export function Navigation({
             alt="Sohwais Threads Logo" 
             className="h-8 sm:h-10 md:h-12 w-auto rounded-md"
           />
-        </button>
-        
+        </button> */}
+       
+<button 
+  onClick={(e) => {
+    e.preventDefault();
+    if (onLogoClick) {
+      onLogoClick();
+    } else {
+      // Default behavior
+      window.location.href = '/';
+    }
+  }}
+  className="focus:outline-none focus:ring-2 focus:ring-[#c9a060] focus:ring-offset-2 focus:ring-offset-transparent rounded-md transition-all hover:opacity-80"
+  aria-label="Sohwais Threads Home"
+>
+  <img 
+    src={logoImage} 
+    alt="Sohwais Threads Logo" 
+    className="h-8 sm:h-10 md:h-12 w-auto rounded-md"
+  />
+</button>
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8">
           <nav aria-label="Main navigation">
@@ -537,7 +556,7 @@ export function Navigation({
           </nav>
           
           {/* Search - Desktop */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             {!isSearchOpen ? (
               <button
                 onClick={() => setIsSearchOpen(true)}
@@ -582,7 +601,7 @@ export function Navigation({
                 </button>
               </div>
             )}
-          </div>
+          </div> */}
           
           {/* Cart Icon */}
           {onCartClick && (
@@ -608,7 +627,7 @@ export function Navigation({
         {/* Mobile Menu Button and Cart */}
         <div className="flex md:hidden items-center gap-2 sm:gap-4">
           {/* Search - Mobile */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             {!isSearchOpen ? (
               <button
                 onClick={() => setIsSearchOpen(true)}
@@ -653,7 +672,7 @@ export function Navigation({
                 </button>
               </div>
             )}
-          </div>
+          </div> */}
 
           {onCartClick && (
             <button

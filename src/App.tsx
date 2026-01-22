@@ -1014,6 +1014,14 @@ export default function App() {
     }, pageChangeDelay + 600);
   };
 
+  const handleBackClick = () => {
+    // या तो
+    window.history.back();
+    
+    // या specific route पर navigate (अगर React Router use कर रहे हैं)
+    // navigate('/');
+  };
+
   const navigateToCollections = (event?: React.MouseEvent) => {
     handleNavigation('collections', event);
   };
@@ -1151,6 +1159,7 @@ export default function App() {
           onOurStoryClick={navigateToOurStory}
           onCraftsmanshipClick={navigateToCraftsmanship}
           onLogoClick={navigateToHome}
+           onBackClick={navigateToHome}
         />
         <CartOverlay
           isOpen={isCartOpen}
@@ -1179,6 +1188,7 @@ export default function App() {
           onOurStoryClick={navigateToOurStory}
           onCraftsmanshipClick={navigateToCraftsmanship}
           onLogoClick={navigateToHome}
+          onBackClick={navigateToHome}
         />
         <CartOverlay
           isOpen={isCartOpen}
@@ -1298,6 +1308,7 @@ export default function App() {
       <>
         <OurCollectionPage
           onBack={handleBackFromMensCollections}
+          
           cartCount={cartCount}
           onCartClick={() => setIsCartOpen(true)}
           onCollectionSelect={handleCollectionSelect}
@@ -1324,7 +1335,7 @@ export default function App() {
   if ((currentPage === 'womenCatalogue' || currentPage === 'collectionCatalogue') && selectedCollection) {
     return (
       <>
-        <CollectionCataloguePage
+        {/* <CollectionCataloguePage
           collectionId={selectedCollection.id}
           collectionName={selectedCollection.name}
           gender={currentPage === 'womenCatalogue' ? 'women' : 'men'}
@@ -1335,7 +1346,22 @@ export default function App() {
           onCollectionClick={navigateToCollections}
           onOurStoryClick={navigateToOurStory}
           onCraftsmanshipClick={navigateToCraftsmanship}
-        />
+        /> */}
+        
+<CollectionCataloguePage
+  collectionId={selectedCollection.id}
+  collectionName={selectedCollection.name}
+  gender={currentPage === 'womenCatalogue' ? 'women' : 'men'}
+  onBack={handleBackFromCatalogue}
+  cartCount={cartCount}
+  onCartClick={() => setIsCartOpen(true)}
+  onAddToCart={handleAddToCart}
+  onCollectionClick={navigateToCollections}
+  onOurStoryClick={navigateToOurStory}
+  onCraftsmanshipClick={navigateToCraftsmanship}
+  onLogoClick={navigateToHome} // Add this
+  onHomeClick={navigateToHome} // Add this
+/>
         <CartOverlay
           isOpen={isCartOpen}
           onClose={() => setIsCartOpen(false)}
@@ -1381,6 +1407,7 @@ export default function App() {
           onCollectionClick={navigateToCollections}
           onHomeClick={navigateToHome}
           onPrivacyPolicyClick={navigateToPrivacyPolicy}
+         
           onShippingClick={navigateToShippingReturns} // ADD THIS PROP
           onTermsClick={() => {
             // You can implement terms page later

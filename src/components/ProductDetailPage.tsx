@@ -1726,6 +1726,8 @@ export function ProductDetailPage({
   const [wishlisted, setWishlisted] = useState(false);
   const [detectedGender, setDetectedGender] = useState(gender);
    
+
+  
   // Handle logo click - agar onLogoClick prop hai to use karo, nahi to onBack
   const handleLogoClick = () => {
     if (onLogoClick) {
@@ -1954,7 +1956,9 @@ export function ProductDetailPage({
           onCraftsmanshipClick={onCraftsmanshipClick} 
           cartCount={cartCount} 
           onCartClick={onCartClick}
-          onLogoClick={handleLogoClick} // Pass the logo click handler
+          // onLogoClick={handleLogoClick} // Pass the logo click handler
+          // onLogoClick={navigateToHome} // Add this
+          
         />
       </div>
 
