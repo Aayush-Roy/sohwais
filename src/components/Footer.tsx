@@ -644,7 +644,7 @@ export function Footer({
               Privacy Policy
             </button>
             <span className="text-[#c9a060]/30">|</span>
-            <button 
+            {/* <button 
               onClick={(e) => {
                 e.preventDefault();
                 onTermsClick?.(e);
@@ -652,7 +652,7 @@ export function Footer({
               className="hover:text-[#fdfcf9] hover:underline transition-colors"
             >
               Terms & Conditions
-            </button>
+            </button> */}
             <span className="text-[#c9a060]/30">|</span>
             <button 
               onClick={(e) => {
