@@ -1,5 +1,5 @@
 
-// import { useState, useEffect } from 'react';
+// import { useState, useEffect, useMemo } from 'react';
 // import { 
 //   ArrowLeft, 
 //   Filter, 
@@ -7,7 +7,9 @@
 //   X, 
 //   Loader,
 //   ShoppingBag,
-//   Grid
+//   Grid,
+//   Search,
+//   Trash2
 // } from 'lucide-react';
 // import { Navigation } from './Navigation';
 // import { Footer } from './Footer';
@@ -83,17 +85,55 @@
 //   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 //   const [showCollectionFilter, setShowCollectionFilter] = useState(false);
 //   const [uniqueCollections, setUniqueCollections] = useState<string[]>([]);
+//   const [searchQuery, setSearchQuery] = useState('');
+//   const [showSearchInput, setShowSearchInput] = useState(false);
+//   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+//   const [showRecentSearches, setShowRecentSearches] = useState(false);
 
 //   useEffect(() => {
-//   window.scrollTo({
-//     top: 0,
-//     left: 0,
-//     behavior: 'instant'
-//   });
-// }, []);
+//     window.scrollTo({
+//       top: 0,
+//       left: 0,
+//       behavior: 'instant'
+//     });
+    
+//     // Load recent searches from localStorage
+//     const savedSearches = localStorage.getItem('recentSearches');
+//     if (savedSearches) {
+//       setRecentSearches(JSON.parse(savedSearches));
+//     }
+//   }, []);
 
+//   // Save recent searches to localStorage
+//   useEffect(() => {
+//     if (recentSearches.length > 0) {
+//       localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+//     }
+//   }, [recentSearches]);
 
-//   // सभी products fetch करें
+//   // Add search to recent searches
+//   const addToRecentSearches = (query: string) => {
+//     if (!query.trim()) return;
+    
+//     setRecentSearches(prev => {
+//       const filtered = prev.filter(search => search.toLowerCase() !== query.toLowerCase());
+//       const updated = [query, ...filtered].slice(0, 5); // Keep only last 5 searches
+//       return updated;
+//     });
+//   };
+
+//   // Clear recent searches
+//   const clearRecentSearches = () => {
+//     setRecentSearches([]);
+//     localStorage.removeItem('recentSearches');
+//   };
+
+//   // Clear search query
+//   const clearSearch = () => {
+//     setSearchQuery('');
+//     setShowRecentSearches(false);
+//   };
+
 //   const fetchAllProducts = async () => {
 //     try {
 //       setLoading(true);
@@ -111,7 +151,6 @@
 //         const productsData = data.data || [];
 //         setAllProductsData(productsData);
         
-//         // Unique collections extract करें
 //         const collections = Array.from(new Set(productsData.map((p: Product) => p.collection))).filter(Boolean);
 //         setUniqueCollections(collections as string[]);
         
@@ -128,7 +167,6 @@
 //     }
 //   };
 
-//   // Collection के products fetch करें
 //   const fetchProductsByCollection = async (collection: string) => {
 //     console.log("collection",collection)
 //     try {
@@ -174,7 +212,6 @@
 //     }
 //   }, [collectionName, showAllProducts]);
 
-//   // Products को filter करने के लिए
 //   const getFilteredProducts = () => {
 //     if (showAllProducts) {
 //       return allProductsData;
@@ -182,8 +219,9 @@
 //     return products;
 //   };
 
-//   // Extract unique colors and sizes from filtered products
-//   const currentProducts = getFilteredProducts();
+//   // Use useMemo for better performance
+//   const currentProducts = useMemo(() => getFilteredProducts(), [showAllProducts, products, allProductsData]);
+  
 //   const allColors = Array.from(new Set(
 //     currentProducts.flatMap(product => 
 //       product.variants?.map(variant => variant.color) || []
@@ -199,9 +237,23 @@
 //   const colors = allColors.length > 0 ? allColors : ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White', 'Gold', 'Brown'];
 //   const sizes = allSizes.length > 0 ? allSizes : ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-//   // Filter and sort products
-//   const filteredAndSortedProducts = () => {
+//   // Filter, search and sort products
+//   const filteredAndSortedProducts = useMemo(() => {
 //     let filtered = [...currentProducts];
+
+//     // Search filter
+//     if (searchQuery.trim()) {
+//       const query = searchQuery.toLowerCase();
+//       filtered = filtered.filter(product => 
+//         product.name.toLowerCase().includes(query) ||
+//         product.description.toLowerCase().includes(query) ||
+//         product.collection.toLowerCase().includes(query) ||
+//         product.category.toLowerCase().includes(query) ||
+//         product.subCategory.toLowerCase().includes(query) ||
+//         product.features.some(feature => feature.toLowerCase().includes(query)) ||
+//         product.tags.some(tag => tag.toLowerCase().includes(query))
+//       );
+//     }
 
 //     // Filter by price range
 //     filtered = filtered.filter(product => 
@@ -246,7 +298,7 @@
 //       default:
 //         return filtered.sort((a, b) => b.rating - a.rating);
 //     }
-//   };
+//   }, [currentProducts, searchQuery, priceRange, selectedColors, selectedSizes, selectedCollections, selectedSort, showAllProducts]);
 
 //   const sortOptions = [
 //     { value: 'featured', label: 'Featured' },
@@ -275,37 +327,49 @@
 //     );
 //   };
 
+//   const handleSearch = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (searchQuery.trim()) {
+//       addToRecentSearches(searchQuery);
+//       setShowRecentSearches(false);
+//       setShowSearchInput(false);
+//     }
+//   };
+
+//   const handleSearchClick = (query: string) => {
+//     setSearchQuery(query);
+//     addToRecentSearches(query);
+//     setShowRecentSearches(false);
+//     setShowSearchInput(false);
+//   };
+
 //   const resetFilters = () => {
 //     setPriceRange([0, 50000]);
 //     setSelectedColors([]);
 //     setSelectedSizes([]);
 //     setSelectedCollections([]);
+//     setSearchQuery('');
+//     setShowRecentSearches(false);
 //   };
 
-//   // const handleBackToProducts = () => {
-//   //   setSelectedProduct(null);
-//   // };
 //   const handleBackToProducts = () => {
-//   setSelectedProduct(null);
-//   window.scrollTo({
-//     top: 0,
-//     left: 0,
-//     behavior: 'instant'
-//   });
-// };
+//     setSelectedProduct(null);
+//     window.scrollTo({
+//       top: 0,
+//       left: 0,
+//       behavior: 'instant'
+//     });
+//   };
 
-//   // Get final price (with discount)
 //   const getFinalPrice = (price: number, discount: number) => {
 //     return discount > 0 ? Math.round(price - (price * discount / 100)) : price;
 //   };
 
-//   // Get primary image
 //   const getPrimaryImage = (product: Product) => {
 //     const primaryImage = product.images?.find(img => img.isPrimary);
 //     return primaryImage?.url || product.images?.[0]?.url || 'https://images.unsplash.com/photo-1568259550238-762d5f3d8e7f';
 //   };
 
-//   // If a product is selected, show the product detail page
 //   if (selectedProduct) {
 //     return (
 //       <ProductDetailPage
@@ -331,17 +395,15 @@
 //     );
 //   }
 
-//   // Page title और description
 //   const pageTitle = showAllProducts ? 'All Collections' : collectionName;
 //   const pageDescription = showAllProducts 
 //     ? 'Explore our complete range of heritage-inspired designs from all collections'
 //     : `Discover the exquisite craftsmanship of our ${collectionName}`;
 
-//   const displayedProducts = filteredAndSortedProducts();
+//   const displayedProducts = filteredAndSortedProducts;
 
 //   return (
 //     <div className="min-h-screen bg-[#fdfcf9] flex flex-col">
-//       {/* Navigation - FIXED VERSION */}
 //       <div className="sticky top-0 left-0 right-0 z-40 bg-[#fdfcf9]">
 //         <Navigation 
 //           cartCount={cartCount} 
@@ -353,24 +415,114 @@
 //         />
 //       </div>
 
-//       {/* Main Content - Scrollable Area */}
 //       <div className="flex-1 overflow-y-auto">
 //         <div className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 md:px-12 lg:px-20">
-//           {/* Back Button */}
-//           <button
-//             onClick={onBack}
-//             className="flex items-center gap-2 text-[#2c1810] hover:text-[#c9a060] transition-colors mb-6 sm:mb-8 font-['Cormorant_Garamond',serif] tracking-[1.5px] text-[10px] sm:text-[11px] uppercase"
-//             aria-label="Go back to collections"
-//           >
-//             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-//             BACK TO COLLECTIONS
-//           </button>
+//           {/* Back Button and Search Bar */}
+//           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+//             <button
+//               onClick={onBack}
+//               className="flex items-center gap-2 text-[#2c1810] hover:text-[#c9a060] transition-colors font-['Cormorant_Garamond',serif] tracking-[1.5px] text-[10px] sm:text-[11px] uppercase"
+//               aria-label="Go back to collections"
+//             >
+//               <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+//               BACK TO COLLECTIONS
+//             </button>
+
+//             {/* Search Bar */}
+//             <div className="relative w-full sm:w-auto">
+//               {showSearchInput ? (
+//                 <form 
+//                   onSubmit={handleSearch}
+//                   className="relative"
+//                 >
+//                   <input
+//                     type="text"
+//                     value={searchQuery}
+//                     onChange={(e) => {
+//                       setSearchQuery(e.target.value);
+//                       if (e.target.value.trim()) {
+//                         setShowRecentSearches(true);
+//                       } else {
+//                         setShowRecentSearches(false);
+//                       }
+//                     }}
+//                     onFocus={() => {
+//                       if (recentSearches.length > 0) {
+//                         setShowRecentSearches(true);
+//                       }
+//                     }}
+//                     placeholder="Search products by name, description, or features..."
+//                     className="w-full sm:w-80 md:w-96 px-4 py-2 pl-10 pr-10 text-[#2c1810] text-sm border border-[#2c1810]/20 rounded-full focus:outline-none focus:border-[#c9a060] focus:ring-1 focus:ring-[#c9a060] font-['Cormorant_Garamond',serif]"
+//                     autoFocus
+//                   />
+//                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#2c1810]/50" />
+                  
+//                   {searchQuery && (
+//                     <button
+//                       type="button"
+//                       onClick={clearSearch}
+//                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#2c1810]/30 hover:text-[#c9a060] transition-colors"
+//                     >
+//                       <X className="w-4 h-4" />
+//                     </button>
+//                   )}
+
+//                   {/* Recent Searches Dropdown */}
+//                   {showRecentSearches && recentSearches.length > 0 && (
+//                     <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-[#2c1810]/10 py-2 z-50">
+//                       <div className="flex justify-between items-center px-4 py-2 border-b border-[#2c1810]/10">
+//                         <span className="text-xs font-medium text-[#2c1810]/60 font-['Cormorant_Garamond',serif]">
+//                           Recent Searches
+//                         </span>
+//                         <button
+//                           onClick={clearRecentSearches}
+//                           className="text-xs text-[#c9a060] hover:text-[#a88440] font-['Cormorant_Garamond',serif] flex items-center gap-1"
+//                         >
+//                           <Trash2 className="w-3 h-3" />
+//                           Clear
+//                         </button>
+//                       </div>
+//                       {recentSearches.map((search, index) => (
+//                         <button
+//                           key={index}
+//                           onClick={() => handleSearchClick(search)}
+//                           className="w-full text-left px-4 py-2 hover:bg-[#fdfcf9] text-sm text-[#2c1810] font-['Cormorant_Garamond',serif] flex items-center gap-2"
+//                         >
+//                           <Search className="w-3 h-3 text-[#c9a060]" />
+//                           {search}
+//                         </button>
+//                       ))}
+//                     </div>
+//                   )}
+//                 </form>
+//               ) : (
+//                 <button
+//                   onClick={() => setShowSearchInput(true)}
+//                   className="flex items-center gap-2 px-4 py-2 text-[#2c1810] hover:text-[#c9a060] transition-colors text-[11px] tracking-[2px] font-['Cormorant_Garamond',serif] uppercase border border-[#2c1810]/20 rounded-full hover:border-[#c9a060]"
+//                   aria-label="Search products"
+//                 >
+//                   <Search className="w-4 h-4" />
+//                   SEARCH
+//                 </button>
+//               )}
+//             </div>
+//           </div>
 
 //           {/* Page Header */}
 //           <div className="text-center mb-8 sm:mb-10 md:mb-12">
 //             <h1 className="text-[#2c1810] text-[28px] sm:text-[36px] md:text-[42px] tracking-[2.24px] sm:tracking-[2.88px] md:tracking-[3.36px] mb-4 sm:mb-5 md:mb-6 font-['Cinzel_Decorative',serif] uppercase px-4">
 //               {pageTitle} 
 //             </h1>
+            
+//             {/* Search Results Summary */}
+//             {searchQuery && (
+//               <div className="mb-4">
+//                 <p className="text-[#c9a060] text-sm font-['Cormorant_Garamond',serif]">
+//                   Showing {displayedProducts.length} results for "{searchQuery}"
+//                 </p>
+//               </div>
+//             )}
+            
 //             {showAllProducts && (
 //               <div className="flex items-center justify-center gap-2 mb-4">
 //                 <Grid className="w-5 h-5 text-[#c9a060]" />
@@ -385,13 +537,13 @@
 //           </div>
 
 //           {/* Stats Bar */}
-//           <div className="flex justify-between items-center mb-6 sm:mb-8 text-sm text-[#2c1810]/70">
-//             <div className="flex items-center gap-4">
+//           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 text-sm text-[#2c1810]/70">
+//             <div className="flex items-center gap-4 flex-wrap">
 //               <span className="font-['Cormorant_Garamond',serif]">
 //                 {displayedProducts.length} Products
 //                 {showAllProducts && ` across ${uniqueCollections.length} Collections`}
 //               </span>
-//               {(selectedColors.length > 0 || selectedSizes.length > 0 || selectedCollections.length > 0) && (
+//               {(searchQuery || selectedColors.length > 0 || selectedSizes.length > 0 || selectedCollections.length > 0) && (
 //                 <button
 //                   onClick={resetFilters}
 //                   className="text-xs text-[#c9a060] hover:text-[#a88440] underline font-['Cormorant_Garamond',serif]"
@@ -468,7 +620,24 @@
 //                     </button>
 //                   </div>
 
-//                   {/* Collections Filter (only for All Products) */}
+//                   {/* Search within filters */}
+//                   <div className="mb-6 pb-6 border-b border-[#2c1810]/10">
+//                     <h3 className="text-[13px] tracking-[1.5px] font-['Cormorant_Garamond',serif] text-[#2c1810] mb-4 uppercase">
+//                       Search
+//                     </h3>
+//                     <div className="relative">
+//                       <input
+//                         type="text"
+//                         value={searchQuery}
+//                         onChange={(e) => setSearchQuery(e.target.value)}
+//                         placeholder="Search products..."
+//                         className="w-full px-4 py-2 pl-10 text-sm border border-[#2c1810]/20 rounded-full focus:outline-none focus:border-[#c9a060] font-['Cormorant_Garamond',serif]"
+//                       />
+//                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#2c1810]/50" />
+//                     </div>
+//                   </div>
+
+//                   {/* Rest of the filters remain the same... */}
 //                   {showAllProducts && uniqueCollections.length > 0 && (
 //                     <div className="mb-6 pb-6 border-b border-[#2c1810]/10">
 //                       <div className="flex justify-between items-center mb-4">
@@ -530,44 +699,26 @@
 //                   </div>
 
 //                   {/* Colors */}
-//                   {/* {colors.length > 0 && (
-//                     <div className="mb-6 pb-6 border-b border-[#2c1810]/10">
-//                       <h3 className="text-[13px] tracking-[1.5px] font-['Cormorant_Garamond',serif] text-[#2c1810] mb-4 uppercase">
-//                         Color
-//                       </h3>
-//                       <div className="flex flex-wrap gap-2">
-//                         {colors.map((color) => (
-//                           <button
-//                             key={color}
-//                             onClick={() => handleColorToggle(color)}
-//                             className={`px-4 py-2 text-[11px] tracking-[1px] font-['Cormorant_Garamond',serif] rounded-full transition-all ${
-//                               selectedColors.includes(color)
-//                                 ? 'bg-[#c9a060] text-white shadow-md'
-//                                 : 'bg-[#fdfcf9] text-[#2c1810] border border-[#2c1810]/20 hover:border-[#c9a060]'
-//                             }`}
-//                           >
-//                             {color}
-//                           </button>
-//                         ))}
-//                       </div>
+//                   <div className="mb-6 pb-6 border-b border-[#2c1810]/10">
+//                     <h3 className="text-[13px] tracking-[1.5px] font-['Cormorant_Garamond',serif] text-[#2c1810] mb-4 uppercase">
+//                       Color
+//                     </h3>
+//                     <div className="flex flex-wrap gap-3">
+//                       {colors.map((color) => (
+//                         <button
+//                           key={color}
+//                           onClick={() => handleColorToggle(color)}
+//                           className={`w-8 h-8 rounded-full border transition-all ${
+//                             selectedColors.includes(color)
+//                               ? 'ring-2 ring-[#c9a060] ring-offset-2'
+//                               : 'border-[#2c1810]/30'
+//                           }`}
+//                           style={{ backgroundColor: color }}
+//                           title={color}
+//                         />
+//                       ))}
 //                     </div>
-//                   )} */}
-//                   <div className="flex flex-wrap gap-3">
-//   {colors.map((color) => (
-//     <button
-//       key={color}
-//       onClick={() => handleColorToggle(color)}
-//       className={`w-8 h-8 rounded-full border transition-all ${
-//         selectedColors.includes(color)
-//           ? 'ring-2 ring-[#c9a060] ring-offset-2'
-//           : 'border-[#2c1810]/30'
-//       }`}
-//       style={{ backgroundColor: color }}
-//       title={color}   // hover pe hex dikh jayega
-//     />
-//   ))}
-// </div>
-
+//                   </div>
 
 //                   {/* Sizes */}
 //                   {sizes.length > 0 && (
@@ -593,12 +744,11 @@
 //                     </div>
 //                   )}
 
-//                   {/* Reset Button */}
 //                   <button
 //                     onClick={resetFilters}
 //                     className="w-full py-3 text-[11px] tracking-[2px] font-['Cormorant_Garamond',serif] text-[#2c1810] border border-[#2c1810]/20 rounded-lg hover:bg-[#c9a060] hover:text-white hover:border-[#c9a060] transition-all uppercase"
 //                   >
-//                     Reset Filters
+//                     Reset All Filters
 //                   </button>
 //                 </div>
 //               </div>
@@ -628,24 +778,36 @@
 //                 <div className="flex flex-col items-center justify-center py-20 text-center">
 //                   <ShoppingBag className="w-16 h-16 text-[#2c1810]/30 mb-4" />
 //                   <p className="text-[#2c1810] font-['Cormorant_Garamond',serif] text-lg mb-2">
-//                     {showAllProducts 
-//                       ? 'No products found' 
-//                       : `No products found in ${collectionName}`}
+//                     {searchQuery 
+//                       ? `No products found for "${searchQuery}"` 
+//                       : showAllProducts 
+//                         ? 'No products found' 
+//                         : `No products found in ${collectionName}`}
 //                   </p>
 //                   <p className="text-[#2c1810]/70 font-['Cormorant_Garamond',serif] mb-6 max-w-md">
-//                     Try adjusting your filters or check back later for new arrivals.
+//                     Try adjusting your search or filters, or check back later for new arrivals.
 //                   </p>
-//                   <button
-//                     onClick={resetFilters}
-//                     className="px-6 py-2 text-sm text-[#c9a060] border border-[#c9a060] rounded-lg hover:bg-[#c9a060] hover:text-white transition-colors font-['Cormorant_Garamond',serif]"
-//                   >
-//                     Clear Filters
-//                   </button>
+//                   <div className="flex gap-4">
+//                     {searchQuery && (
+//                       <button
+//                         onClick={clearSearch}
+//                         className="px-6 py-2 text-sm text-[#c9a060] border border-[#c9a060] rounded-lg hover:bg-[#c9a060] hover:text-white transition-colors font-['Cormorant_Garamond',serif]"
+//                       >
+//                         Clear Search
+//                       </button>
+//                     )}
+//                     <button
+//                       onClick={resetFilters}
+//                       className="px-6 py-2 text-sm text-[#2c1810] border border-[#2c1810]/20 rounded-lg hover:bg-[#2c1810] hover:text-white transition-colors font-['Cormorant_Garamond',serif]"
+//                     >
+//                       Reset All Filters
+//                     </button>
+//                   </div>
 //                 </div>
 //               ) : (
 //                 <>
 //                   {/* Collection Tags for All Products */}
-//                   {showAllProducts && selectedCollections.length === 0 && (
+//                   {showAllProducts && selectedCollections.length === 0 && !searchQuery && (
 //                     <div className="mb-6 flex flex-wrap gap-2">
 //                       {uniqueCollections.slice(0, 6).map(collection => (
 //                         <button
@@ -693,31 +855,26 @@
 //                             }}
 //                           />
                           
-//                           {/* Discount Badge */}
 //                           {product.discount > 0 && (
 //                             <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
 //                               {product.discount}% OFF
 //                             </div>
 //                           )}
                           
-//                           {/* Collection Badge (only for All Products) */}
 //                           {showAllProducts && product.collection && (
 //                             <div className="absolute top-3 right-3 bg-[#2c1810]/80 text-white px-3 py-1 rounded-full text-xs font-['Cormorant_Garamond',serif]">
 //                               {product.collection}
 //                             </div>
 //                           )}
                           
-//                           {/* Stock Status */}
 //                           {product.stock === 0 && (
 //                             <div className="absolute top-12 left-3 bg-gray-800 text-white px-3 py-1 rounded-full text-xs">
 //                               Out of Stock
 //                             </div>
 //                           )}
                           
-//                           {/* Hover Overlay */}
 //                           <div className="absolute inset-0 bg-[#2c1810]/0 group-hover:bg-[#2c1810]/10 transition-all duration-300" />
                           
-//                           {/* Corner Decorations */}
 //                           <div className="absolute left-3 top-3 w-10 h-10 border-l-2 border-t-2 border-[#c9a060] opacity-0 group-hover:opacity-100 transition-all duration-300" />
 //                           <div className="absolute right-3 bottom-3 w-10 h-10 border-r-2 border-b-2 border-[#c9a060] opacity-0 group-hover:opacity-100 transition-all duration-300" />
 //                         </div>
@@ -759,7 +916,6 @@
 //                             </div>
 //                           </div>
                           
-//                           {/* Category Tags */}
 //                           <div className="flex flex-wrap gap-1 mb-3">
 //                             {product.category && (
 //                               <span className="px-2 py-1 bg-[#f5f1e8] text-[#2c1810] text-xs rounded font-['Cormorant_Garamond',serif]">
@@ -773,7 +929,6 @@
 //                             )}
 //                           </div>
                           
-//                           {/* Variants Preview */}
 //                           {product.variants && product.variants.length > 0 && (
 //                             <div className="flex gap-2">
 //                               {product.variants.slice(0, 3).map((variant, index) => (
@@ -801,15 +956,28 @@
 //         </div>
 //       </div>
 
-//       {/* Footer - नीचे ही रहेगा */}
 //       <div className="mt-auto">
 //         <ExperienceFooterWrapper>
-//           <Footer />
+//           <Footer 
+//           onCollectionClick={onCollectionClick}
+//           onOurStoryClick={onOurStoryClick}
+//           onCraftsmanshipClick={onCraftsmanshipClick}
+       
+//           />
 //         </ExperienceFooterWrapper>
 //       </div>
 //     </div>
 //   );
 // }
+const collectionNameMap: Record<string, string> = {
+  'madhubani': 'Madhubani Collection',
+  'sujini': 'Sujini Collection',
+  'marble': 'Marble Collection',
+  'nakashi': 'Nakashi Collection',
+  'majestic-linen': 'Majestic Linen',
+  'batik-archive': 'The Batik Archive',
+};
+
 import { useState, useEffect, useMemo } from 'react';
 import { 
   ArrowLeft, 
@@ -822,24 +990,21 @@ import {
   Search,
   Trash2
 } from 'lucide-react';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Navigation } from './Navigation';
 import { Footer } from './Footer';
 import { ExperienceFooterWrapper } from './ExperienceFooterWrapper';
-import { ProductDetailPage, CartItem } from './ProductDetailPage';
+import { CartItem } from './ProductDetailPage';
 
 const API_BASE_URL = "https://api.sohwais.com/api";
-// const API_BASE_URL = "http://localhost:5000/api";
 
 interface ProductPageProps {
-  collectionName: string;
   showAllProducts?: boolean;
-  onBack: () => void;
+  onBack?: () => void;
   cartCount: number;
   onCartClick: () => void;
   onAddToCart: (item: CartItem) => void;
-  onCollectionClick?: (event?: React.MouseEvent) => void;
-  onOurStoryClick?: (event?: React.MouseEvent) => void;
-  onCraftsmanshipClick?: (event?: React.MouseEvent) => void;
+  onLogoClick?: () => void;
 }
 
 interface Product {
@@ -872,16 +1037,33 @@ interface Product {
 }
 
 export function ProductPage({ 
-  collectionName, 
   showAllProducts = false,
   onBack, 
   cartCount, 
   onCartClick, 
-  onAddToCart, 
-  onCollectionClick, 
-  onOurStoryClick, 
-  onCraftsmanshipClick 
+  onAddToCart,
+  onLogoClick
 }: ProductPageProps) {
+  // Get URL params
+  // const { collectionName: urlCollectionName, gender } = useParams<{ 
+  //   collectionName?: string; 
+  //   gender?: string;
+  // }>();
+  const { collectionSlug, gender } = useParams<{
+  collectionSlug?: string;
+  gender?: string;
+}>();
+
+  // Determine actual collection name
+  // const collectionName = urlCollectionName || 'All Products';
+  const collectionName =
+  collectionSlug && collectionNameMap[collectionSlug]
+    ? collectionNameMap[collectionSlug]
+    : 'All Products';
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   const [products, setProducts] = useState<Product[]>([]);
   const [allProductsData, setAllProductsData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -893,7 +1075,6 @@ export function ProductPage({
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showCollectionFilter, setShowCollectionFilter] = useState(false);
   const [uniqueCollections, setUniqueCollections] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -901,6 +1082,7 @@ export function ProductPage({
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showRecentSearches, setShowRecentSearches] = useState(false);
 
+  // Initialize
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -922,13 +1104,29 @@ export function ProductPage({
     }
   }, [recentSearches]);
 
+  // Handle back navigation
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      // Default back behavior
+      if (showAllProducts || gender === 'men') {
+        navigate('/collections');
+      } else if (gender === 'women') {
+        navigate('/collections/women');
+      } else {
+        navigate(-1);
+      }
+    }
+  };
+
   // Add search to recent searches
   const addToRecentSearches = (query: string) => {
     if (!query.trim()) return;
     
     setRecentSearches(prev => {
       const filtered = prev.filter(search => search.toLowerCase() !== query.toLowerCase());
-      const updated = [query, ...filtered].slice(0, 5); // Keep only last 5 searches
+      const updated = [query, ...filtered].slice(0, 5);
       return updated;
     });
   };
@@ -945,22 +1143,30 @@ export function ProductPage({
     setShowRecentSearches(false);
   };
 
+  // Fetch all products
   const fetchAllProducts = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      const response = await fetch(`${API_BASE_URL}/products/category/Men`);
+      // Determine API endpoint based on gender
+      // const endpoint = gender 
+        // ? `${API_BASE_URL}/products/category/${gender === 'men' ? 'Men' : 'Women'}`
+        // : `${API_BASE_URL}/products`;
+      const allproductsForMen = `${API_BASE_URL}/products/category/Men`
+      const response = await fetch(allproductsForMen);
+      
       
       if (!response.ok) {
         throw new Error(`Failed to fetch products: ${response.status}`);
       }
       
       const data = await response.json();
-      
+      console.log(data);
       if (data.success) {
         const productsData = data.data || [];
         setAllProductsData(productsData);
+        setProducts(productsData);
         
         const collections = Array.from(new Set(productsData.map((p: Product) => p.collection))).filter(Boolean);
         setUniqueCollections(collections as string[]);
@@ -978,8 +1184,8 @@ export function ProductPage({
     }
   };
 
+  // Fetch products by collection
   const fetchProductsByCollection = async (collection: string) => {
-    console.log("collection",collection)
     try {
       setLoading(true);
       setError(null);
@@ -987,12 +1193,12 @@ export function ProductPage({
       const encodedCollection = encodeURIComponent(collection);
       const response = await fetch(`${API_BASE_URL}/products/collection/${encodedCollection}`);
      
-      
       if (!response.ok) {
         throw new Error(`Failed to fetch products: ${response.status}`);
       }
       
       const data = await response.json();
+      console.log(data);
       
       if (data.success) {
         setProducts(data.data || []);
@@ -1011,34 +1217,46 @@ export function ProductPage({
     }
   };
 
-  useEffect(() => {
-    if (showAllProducts) {
-      fetchAllProducts().then(allProducts => {
-        if (allProducts.length > 0) {
-          setProducts(allProducts);
-        }
-      });
-    } else {
-      fetchProductsByCollection(collectionName);
-    }
-  }, [collectionName, showAllProducts]);
+  // Fetch data based on params
+  // useEffect(() => {
+  //   if (showAllProducts || !collectionName || collectionName === 'All Products') {
+  //     fetchAllProducts();
+  //   } else {
+  //     fetchProductsByCollection(collectionName);
+  //   }
+  // }, [collectionName, showAllProducts, gender]);
 
-  const getFilteredProducts = () => {
-    if (showAllProducts) {
+ useEffect(() => {
+  if (collectionSlug) {
+    const realName = collectionNameMap[collectionSlug];
+    if (realName) {
+      fetchProductsByCollection(realName);
+    } else {
+      fetchAllProducts();
+    }
+  } else {
+    fetchAllProducts();
+  }
+}, [collectionSlug, gender]);
+
+
+
+  // Get current products to display
+  const currentProducts = useMemo(() => {
+    if (showAllProducts || !collectionName || collectionName === 'All Products') {
       return allProductsData;
     }
     return products;
-  };
-
-  // Use useMemo for better performance
-  const currentProducts = useMemo(() => getFilteredProducts(), [showAllProducts, products, allProductsData]);
+  }, [showAllProducts, collectionName, products, allProductsData]);
   
+  // Get all available colors
   const allColors = Array.from(new Set(
     currentProducts.flatMap(product => 
       product.variants?.map(variant => variant.color) || []
     )
   )).filter(Boolean);
 
+  // Get all available sizes
   const allSizes = Array.from(new Set(
     currentProducts.flatMap(product => 
       product.variants?.map(variant => variant.size) || []
@@ -1058,7 +1276,7 @@ export function ProductPage({
       filtered = filtered.filter(product => 
         product.name.toLowerCase().includes(query) ||
         product.description.toLowerCase().includes(query) ||
-        product.collection.toLowerCase().includes(query) ||
+        (product.collection && product.collection.toLowerCase().includes(query)) ||
         product.category.toLowerCase().includes(query) ||
         product.subCategory.toLowerCase().includes(query) ||
         product.features.some(feature => feature.toLowerCase().includes(query)) ||
@@ -1086,7 +1304,7 @@ export function ProductPage({
     }
 
     // Filter by collections (only when showing all products)
-    if (showAllProducts && selectedCollections.length > 0) {
+    if ((showAllProducts || !collectionName) && selectedCollections.length > 0) {
       filtered = filtered.filter(product =>
         selectedCollections.includes(product.collection)
       );
@@ -1109,8 +1327,9 @@ export function ProductPage({
       default:
         return filtered.sort((a, b) => b.rating - a.rating);
     }
-  }, [currentProducts, searchQuery, priceRange, selectedColors, selectedSizes, selectedCollections, selectedSort, showAllProducts]);
+  }, [currentProducts, searchQuery, priceRange, selectedColors, selectedSizes, selectedCollections, selectedSort, showAllProducts, collectionName]);
 
+  // Sort options
   const sortOptions = [
     { value: 'featured', label: 'Featured' },
     { value: 'price-low', label: 'Price: Low to High' },
@@ -1120,6 +1339,7 @@ export function ProductPage({
     { value: 'name-desc', label: 'Name: Z-A' }
   ];
 
+  // Filter handlers
   const handleColorToggle = (color: string) => {
     setSelectedColors(prev =>
       prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]
@@ -1138,6 +1358,7 @@ export function ProductPage({
     );
   };
 
+  // Search handlers
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -1154,6 +1375,7 @@ export function ProductPage({
     setShowSearchInput(false);
   };
 
+  // Reset all filters
   const resetFilters = () => {
     setPriceRange([0, 50000]);
     setSelectedColors([]);
@@ -1163,75 +1385,46 @@ export function ProductPage({
     setShowRecentSearches(false);
   };
 
-  const handleBackToProducts = () => {
-    setSelectedProduct(null);
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'instant'
-    });
-  };
-
+  // Calculate final price with discount
   const getFinalPrice = (price: number, discount: number) => {
     return discount > 0 ? Math.round(price - (price * discount / 100)) : price;
   };
 
+  // Get primary product image
   const getPrimaryImage = (product: Product) => {
     const primaryImage = product.images?.find(img => img.isPrimary);
     return primaryImage?.url || product.images?.[0]?.url || 'https://images.unsplash.com/photo-1568259550238-762d5f3d8e7f';
   };
 
-  if (selectedProduct) {
-    return (
-      <ProductDetailPage
-        productId={selectedProduct._id}
-        productName={selectedProduct.name}
-        collectionName={selectedProduct.collection}
-        price={selectedProduct.price}
-        discount={selectedProduct.discount}
-        description={selectedProduct.description}
-        images={selectedProduct.images}
-        variants={selectedProduct.variants}
-        features={selectedProduct.features}
-        category={selectedProduct.category}
-        subCategory={selectedProduct.subCategory}
-        onBack={handleBackToProducts}
-        onAddToCart={onAddToCart}
-        onCollectionClick={onCollectionClick}
-        onOurStoryClick={onOurStoryClick}
-        onCraftsmanshipClick={onCraftsmanshipClick}
-        cartCount={cartCount}
-        onCartClick={onCartClick}
-      />
-    );
-  }
-
-  const pageTitle = showAllProducts ? 'All Collections' : collectionName;
-  const pageDescription = showAllProducts 
-    ? 'Explore our complete range of heritage-inspired designs from all collections'
+  // Page title and description
+  const pageTitle = showAllProducts || !collectionName || collectionName === 'All Products'
+    ? (gender === 'men' ? "Men's Collection" : gender === 'women' ? "Women's Collection" : 'All Collections')
+    : collectionName;
+    
+  const pageDescription = showAllProducts || !collectionName || collectionName === 'All Products'
+    ? 'Explore our complete range of heritage-inspired designs'
     : `Discover the exquisite craftsmanship of our ${collectionName}`;
 
   const displayedProducts = filteredAndSortedProducts;
 
   return (
     <div className="min-h-screen bg-[#fdfcf9] flex flex-col">
-      <div className="sticky top-0 left-0 right-0 z-40 bg-[#fdfcf9]">
+      {/* Sticky Navigation */}
+      {/* <div className="sticky top-0 left-0 right-0 z-40 bg-[#fdfcf9]">
         <Navigation 
           cartCount={cartCount} 
           onCartClick={onCartClick} 
           mode="light"
-          onCollectionClick={onCollectionClick}
-          onOurStoryClick={onOurStoryClick}
-          onCraftsmanshipClick={onCraftsmanshipClick}
+          onLogoClick={onLogoClick}
         />
-      </div>
+      </div> */}
 
       <div className="flex-1 overflow-y-auto">
         <div className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 md:px-12 lg:px-20">
           {/* Back Button and Search Bar */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
             <button
-              onClick={onBack}
+              onClick={handleBack}
               className="flex items-center gap-2 text-[#2c1810] hover:text-[#c9a060] transition-colors font-['Cormorant_Garamond',serif] tracking-[1.5px] text-[10px] sm:text-[11px] uppercase"
               aria-label="Go back to collections"
             >
@@ -1334,7 +1527,7 @@ export function ProductPage({
               </div>
             )}
             
-            {showAllProducts && (
+            {(showAllProducts || !collectionName || collectionName === 'All Products') && (
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Grid className="w-5 h-5 text-[#c9a060]" />
                 <span className="text-[#2c1810]/70 text-[13px] font-['Cormorant_Garamond',serif]">
@@ -1352,7 +1545,7 @@ export function ProductPage({
             <div className="flex items-center gap-4 flex-wrap">
               <span className="font-['Cormorant_Garamond',serif]">
                 {displayedProducts.length} Products
-                {showAllProducts && ` across ${uniqueCollections.length} Collections`}
+                {(showAllProducts || !collectionName || collectionName === 'All Products') && ` across ${uniqueCollections.length} Collections`}
               </span>
               {(searchQuery || selectedColors.length > 0 || selectedSizes.length > 0 || selectedCollections.length > 0) && (
                 <button
@@ -1448,8 +1641,8 @@ export function ProductPage({
                     </div>
                   </div>
 
-                  {/* Rest of the filters remain the same... */}
-                  {showAllProducts && uniqueCollections.length > 0 && (
+                  {/* Collections Filter (only for all products view) */}
+                  {(showAllProducts || !collectionName || collectionName === 'All Products') && uniqueCollections.length > 0 && (
                     <div className="mb-6 pb-6 border-b border-[#2c1810]/10">
                       <div className="flex justify-between items-center mb-4">
                         <h3 className="text-[13px] tracking-[1.5px] font-['Cormorant_Garamond',serif] text-[#2c1810] uppercase">
@@ -1555,6 +1748,7 @@ export function ProductPage({
                     </div>
                   )}
 
+                  {/* Reset Filters Button */}
                   <button
                     onClick={resetFilters}
                     className="w-full py-3 text-[11px] tracking-[2px] font-['Cormorant_Garamond',serif] text-[#2c1810] border border-[#2c1810]/20 rounded-lg hover:bg-[#c9a060] hover:text-white hover:border-[#c9a060] transition-all uppercase"
@@ -1579,7 +1773,7 @@ export function ProductPage({
                   <ShoppingBag className="w-16 h-16 text-[#2c1810]/30 mb-4" />
                   <p className="text-[#2c1810] font-['Cormorant_Garamond',serif] mb-2">{error}</p>
                   <button
-                    onClick={() => showAllProducts ? fetchAllProducts() : fetchProductsByCollection(collectionName)}
+                    onClick={() => showAllProducts || !collectionName ? fetchAllProducts() : fetchProductsByCollection(collectionName)}
                     className="px-6 py-2 text-sm text-[#c9a060] border border-[#c9a060] rounded-lg hover:bg-[#c9a060] hover:text-white transition-colors font-['Cormorant_Garamond',serif]"
                   >
                     Try Again
@@ -1591,7 +1785,7 @@ export function ProductPage({
                   <p className="text-[#2c1810] font-['Cormorant_Garamond',serif] text-lg mb-2">
                     {searchQuery 
                       ? `No products found for "${searchQuery}"` 
-                      : showAllProducts 
+                      : showAllProducts || !collectionName
                         ? 'No products found' 
                         : `No products found in ${collectionName}`}
                   </p>
@@ -1618,16 +1812,16 @@ export function ProductPage({
               ) : (
                 <>
                   {/* Collection Tags for All Products */}
-                  {showAllProducts && selectedCollections.length === 0 && !searchQuery && (
+                  {/* {(showAllProducts || !collectionName || collectionName === 'All Products') && selectedCollections.length === 0 && !searchQuery && (
                     <div className="mb-6 flex flex-wrap gap-2">
                       {uniqueCollections.slice(0, 6).map(collection => (
-                        <button
+                        <Link
                           key={collection}
-                          onClick={() => handleCollectionToggle(collection)}
+                          to={`/collections/${gender || 'men'}/${collection.toLowerCase().replace(/\s+/g, '-')}`}
                           className="px-4 py-2 text-xs tracking-[1px] bg-[#f5f1e8] text-[#2c1810] rounded-full hover:bg-[#c9a060] hover:text-white transition-colors font-['Cormorant_Garamond',serif]"
                         >
                           {collection}
-                        </button>
+                        </Link>
                       ))}
                       {uniqueCollections.length > 6 && (
                         <button
@@ -1638,22 +1832,16 @@ export function ProductPage({
                         </button>
                       )}
                     </div>
-                  )}
+                  )} */}
 
+                  {/* Products Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {displayedProducts.map((product) => (
-                      <div
+                      <Link
                         key={product._id}
-                        className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
-                        role="button"
-                        tabIndex={0}
+                        to={`/product/${product._id}`}
+                        className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer block"
                         aria-label={`View ${product.name}`}
-                        onClick={() => setSelectedProduct(product)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            setSelectedProduct(product);
-                          }
-                        }}
                       >
                         {/* Product Image */}
                         <div className="relative h-96 bg-[#f5f1e8] overflow-hidden">
@@ -1672,7 +1860,7 @@ export function ProductPage({
                             </div>
                           )}
                           
-                          {showAllProducts && product.collection && (
+                          {(showAllProducts || !collectionName || collectionName === 'All Products') && product.collection && (
                             <div className="absolute top-3 right-3 bg-[#2c1810]/80 text-white px-3 py-1 rounded-full text-xs font-['Cormorant_Garamond',serif]">
                               {product.collection}
                             </div>
@@ -1692,7 +1880,7 @@ export function ProductPage({
 
                         {/* Product Info */}
                         <div className="p-5">
-                          {showAllProducts && product.collection && (
+                          {(showAllProducts || !collectionName || collectionName === 'All Products') && product.collection && (
                             <div className="mb-2">
                               <span className="text-[10px] tracking-[2px] text-[#c9a060] font-['Cormorant_Garamond',serif] uppercase">
                                 {product.collection}
@@ -1757,7 +1945,7 @@ export function ProductPage({
                             </div>
                           )}
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </>
@@ -1767,9 +1955,12 @@ export function ProductPage({
         </div>
       </div>
 
+      {/* Footer */}
       <div className="mt-auto">
         <ExperienceFooterWrapper>
-          <Footer />
+          <Footer 
+            onHomeClick={onLogoClick}
+          />
         </ExperienceFooterWrapper>
       </div>
     </div>

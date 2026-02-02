@@ -9,7 +9,7 @@ import { useRef } from 'react';
 import image1 from 'figma:asset/5ccf59d65dad8825fe2c2cecb122131f8855ca5c.png';
 import image2 from 'figma:asset/1457867737d401deaf1fbf348cd1c5c44ff180b3.png';
 import image3 from 'figma:asset/1b69c0495fc4a10453f9e998d7d09cf6fa9e0437.png';
-import { useNavigate } from "react-router-dom";
+
 interface OurStoryPageProps {
   onBack: (event?: React.MouseEvent) => void;
   cartCount: number;
@@ -21,7 +21,6 @@ interface OurStoryPageProps {
 
 export function OurStoryPage({ onBack, cartCount, onCartClick, onOurStoryClick, onCollectionClick, onCraftsmanshipClick }: OurStoryPageProps) {
   const heroImageRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
   const { scrollYProgress: heroScrollProgress } = useScroll({
     target: heroImageRef,
     offset: ["start start", "end start"]
@@ -31,7 +30,16 @@ export function OurStoryPage({ onBack, cartCount, onCartClick, onOurStoryClick, 
   return (
     <div className="min-h-screen bg-[#1a1410] overflow-x-hidden">
       {/* Navigation */}
-     
+      <div className="fixed top-0 left-0 right-0 z-40">
+        <Navigation 
+          cartCount={cartCount} 
+          onCartClick={onCartClick} 
+          mode="dark"
+          onCollectionClick={onCollectionClick}
+          onOurStoryClick={onOurStoryClick}
+          onCraftsmanshipClick={onCraftsmanshipClick}
+        />
+      </div>
 
       {/* Content */}
       <div className="relative">
@@ -40,8 +48,7 @@ export function OurStoryPage({ onBack, cartCount, onCartClick, onOurStoryClick, 
           {/* Back Button - Positioned over hero */}
           <div className="absolute top-24 sm:top-28 md:top-32 left-0 right-0 z-30 px-4 sm:px-6 md:px-12 lg:px-20">
             <button
-              // onClick={onBack}
-              onClick={() => navigate(-1)}
+              onClick={onBack}
               className="flex items-center gap-2 text-[#fdfcf9]/90 hover:text-[#c9a060] transition-colors font-['Cormorant_Garamond',serif] tracking-[1.5px] text-[10px] sm:text-[11px] backdrop-blur-sm bg-[#1a1410]/30 px-4 py-2 rounded-full border border-[#fdfcf9]/10"
               aria-label="Go back to home page"
             >

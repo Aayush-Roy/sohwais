@@ -4,6 +4,7 @@ import { Footer } from './Footer';
 import { ExperienceFooterWrapper } from './ExperienceFooterWrapper';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import image1 from 'figma:asset/f4eee583d5c136ad638309ef4b1f99e3b5ef11ae.png';
 import image2 from 'figma:asset/53b1a43f61e678bcadc183073e5312227d60fd0a.png';
 import image3 from 'figma:asset/505308c4ebb6c5545ab81d5dc02a2bb02800d3d3.png';
@@ -19,6 +20,7 @@ interface CraftsmanshipPageProps {
 
 export function CraftsmanshipPage({ onBack, onOurStoryClick, onCraftsmanshipClick, onCollectionClick, cartCount, onCartClick }: CraftsmanshipPageProps) {
   const heroRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"]
@@ -50,7 +52,8 @@ export function CraftsmanshipPage({ onBack, onOurStoryClick, onCraftsmanshipClic
           {/* Back Button */}
           <div className="fixed top-28 sm:top-32 md:top-36 left-0 right-0 z-30 px-4 sm:px-6 md:px-12 lg:px-20">
             <motion.button
-              onClick={onBack}
+              // onClick={onBack}
+             onClick={() => navigate(-1)}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}

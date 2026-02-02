@@ -1,3 +1,4 @@
+
 // import { useState } from 'react';
 // import { ArrowLeft } from 'lucide-react';
 // import { Navigation } from './Navigation';
@@ -13,6 +14,7 @@
 // import Nakasi from "../assets/nakasi.png";
 // import Majestic from "../assets/majestic.jpeg";
 // import Batik from "../assets/Bartik(TN).png";
+
 // interface CollectionsPageProps {
 //   onBack: (event?: React.MouseEvent) => void;
 //   cartCount: number;
@@ -23,63 +25,83 @@
 //   onCraftsmanshipClick?: (event?: React.MouseEvent) => void;
 // }
 
-// export function CollectionsPage({ onBack, cartCount, onCartClick, onAddToCart, onCollectionClick, onOurStoryClick, onCraftsmanshipClick }: CollectionsPageProps) {
-//   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+// // यह type add करें collection selection के लिए
+// type CollectionSelection = {
+//   name: string;
+//   showAllProducts: boolean;
+// };
+
+// export function CollectionsPage({ 
+//   onBack, 
+//   cartCount, 
+//   onCartClick, 
+//   onAddToCart, 
+//   onCollectionClick, 
+//   onOurStoryClick, 
+//   onCraftsmanshipClick 
+// }: CollectionsPageProps) {
+//   const [selectedCollection, setSelectedCollection] = useState<CollectionSelection | null>(null);
 
 //   const collections = [
+//     {
+//       id: 7,
+//       name: 'Explore All Designs',
+//       description: 'Discover our complete range of heritage-inspired collections',
+//       imageUrl: ExploreAll,
+//       textTheme: 'dark',
+//       isExploreAll: true // नया flag add करें
+//     },
 //     {
 //       id: 1,
 //       name: 'Madhubani Collection',
 //       description: 'Traditional folk art from Bihar, featuring intricate geometric patterns and vibrant colors',
 //       imageUrl: madhubaniImage,
-//       textTheme: 'dark' // dark text for this image
+//       textTheme: 'dark'
+//     },
+//     {
+//       id: 5,
+//       name: 'Majestic Linen',
+//       description: 'Premium linen crafted with heritage techniques, offering timeless comfort and elegance',
+//       imageUrl: Majestic,
+//       textTheme: 'dark'
 //     },
 //     {
 //       id: 2,
 //       name: 'Sujini Collection',
 //       description: 'Delicate running stitch embroidery creating beautiful quilted textures',
 //       imageUrl: sujiniImage,
-//       textTheme: 'dark' // dark text for this darker/vibrant image
+//       textTheme: 'dark'
 //     },
 //     {
 //       id: 3,
 //       name: 'Marble Collection',
 //       description: 'Inspired by the timeless elegance of marble artistry and craftsmanship',
-//       imageUrl:Marble ,
-//       textTheme: 'dark' // dark text for plain background
+//       imageUrl: Marble,
+//       textTheme: 'dark'
 //     },
 //     {
 //       id: 4,
 //       name: 'Nakashi Collection',
 //       description: 'Exquisite hand-painted designs showcasing intricate artistic details',
-//       imageUrl:Nakasi,
-//       textTheme: 'dark' // dark text for plain background
+//       imageUrl: Nakasi,
+//       textTheme: 'dark'
 //     },
-//     {
-//       id: 5,
-//       name: 'Majestic Linen',
-//       description: 'Premium linen crafted with heritage techniques, offering timeless comfort and elegance',
-//       imageUrl:Majestic,
-//       textTheme: 'dark' // dark text for plain background
-//     },
+    
 //     {
 //       id: 6,
 //       name: 'The Batik Archive',
 //       description: 'Ancient wax-resist dyeing tradition creating mesmerizing patterns and rich textures',
-//       imageUrl:Batik,
-//       textTheme: 'dark' // dark text for plain background
+//       imageUrl: Batik,
+//       textTheme: 'dark'
 //     },
-//     {
-//       id: 7,
-//       name: 'Explore More Designs',
-//       description: 'Discover our complete range of heritage-inspired collections',
-//       imageUrl:ExploreAll,
-//       textTheme: 'dark' // dark text for plain background
-//     }
+    
 //   ];
 
-//   const handleCollectionClick = (collectionName: string) => {
-//     setSelectedCollection(collectionName);
+//   const handleCollectionClick = (collectionName: string, isExploreAll = false) => {
+//     setSelectedCollection({
+//       name: isExploreAll ? 'All Collections' : collectionName,
+//       showAllProducts: isExploreAll
+//     });
 //   };
 
 //   const handleBackToCollections = () => {
@@ -90,7 +112,8 @@
 //   if (selectedCollection) {
 //     return (
 //       <ProductPage
-//         collectionName={selectedCollection}
+//         collectionName={selectedCollection.name}
+//         showAllProducts={selectedCollection.showAllProducts}
 //         onBack={handleBackToCollections}
 //         cartCount={cartCount}
 //         onCartClick={onCartClick}
@@ -147,7 +170,10 @@
 //               role="button"
 //               tabIndex={0}
 //               aria-label={`View ${collection.name}`}
-//               onClick={() => handleCollectionClick(collection.name)}
+//               onClick={() => handleCollectionClick(
+//                 collection.name, 
+//                 (collection as any).isExploreAll
+//               )}
 //             >
 //               {/* Plain Background */}
 //               <div className="relative h-96 sm:h-[28rem] md:h-[32rem] overflow-hidden bg-[#f5f1e8]">
@@ -159,18 +185,20 @@
 //                     className="absolute inset-0 w-full h-full object-cover"
 //                   />
 //                 )}
+//                 {/* Explore All के लिए special styling */}
+//                 {(collection as any).isExploreAll && (
+//                   <div className="absolute inset-0 bg-gradient-to-tr from-[#f4d98a]/20 to-transparent" />
+//                 )}
 //                 {/* Corner Decorations */}
 //                 <div className="absolute left-3 sm:left-4 top-3 sm:top-4 w-10 sm:w-12 h-10 sm:h-12 border-l-2 border-t-2 border-[#c9a060] opacity-0 group-hover:opacity-100 transition-all duration-500" />
 //                 <div className="absolute right-3 sm:right-4 bottom-3 sm:bottom-4 w-10 sm:w-12 h-10 sm:h-12 border-r-2 border-b-2 border-[#c9a060] opacity-0 group-hover:opacity-100 transition-all duration-500" />
 //               </div>
 
 //               {/* Content */}
-//               <div className={`absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black/80 via-black/40 to-transparent backdrop-blur-sm ${
-//                 collection.textTheme === 'light' ? 'text-[#fdfcf9]' : 'text-[#fdfcf9]'
-//               }`}>
+//               <div className={`absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black/80 via-black/40 to-transparent backdrop-blur-sm text-[#fdfcf9]`}>
 //                 <h3 className={`text-[20px] sm:text-[22px] md:text-[24px] tracking-[1.5px] sm:tracking-[1.7px] md:tracking-[1.92px] mb-2 sm:mb-3 font-['Cinzel_Decorative',serif] transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${
-//                   collection.textTheme === 'light' 
-//                     ? 'group-hover:text-[#f4d98a]' 
+//                   (collection as any).isExploreAll 
+//                     ? 'text-[#f4d98a]' 
 //                     : 'group-hover:text-[#f4d98a]'
 //                 }`}>
 //                   {collection.name}
@@ -180,7 +208,10 @@
 //                 </p>
 //                 <div className="mt-3 sm:mt-4 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
 //                   <span className="text-[10px] sm:text-[11px] tracking-[2px] border-b border-[#f4d98a] pb-1 font-['Cormorant_Garamond',serif] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-//                     VIEW COLLECTION →
+//                     {(collection as any).isExploreAll 
+//                       ? 'EXPLORE ALL DESIGNS →' 
+//                       : 'VIEW COLLECTION →'
+//                     }
 //                   </span>
 //                 </div>
 //               </div>
@@ -196,8 +227,9 @@
 //     </div>
 //   );
 // }
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom'; // ✅ Added React Router imports
 import { Navigation } from './Navigation';
 import { Footer } from './Footer';
 import { ExperienceFooterWrapper } from './ExperienceFooterWrapper';
@@ -213,44 +245,44 @@ import Majestic from "../assets/majestic.jpeg";
 import Batik from "../assets/Bartik(TN).png";
 
 interface CollectionsPageProps {
-  onBack: (event?: React.MouseEvent) => void;
+  onBack?: () => void; // Made optional
   cartCount: number;
   onCartClick: () => void;
   onAddToCart: (item: CartItem) => void;
-  onCollectionClick?: (event?: React.MouseEvent) => void;
-  onOurStoryClick?: (event?: React.MouseEvent) => void;
-  onCraftsmanshipClick?: (event?: React.MouseEvent) => void;
+  onLogoClick?: () => void; // Added for logo navigation
 }
-
-// यह type add करें collection selection के लिए
-type CollectionSelection = {
-  name: string;
-  showAllProducts: boolean;
-};
 
 export function CollectionsPage({ 
   onBack, 
   cartCount, 
   onCartClick, 
-  onAddToCart, 
-  onCollectionClick, 
-  onOurStoryClick, 
-  onCraftsmanshipClick 
+  onAddToCart,
+  onLogoClick 
 }: CollectionsPageProps) {
-  const [selectedCollection, setSelectedCollection] = useState<CollectionSelection | null>(null);
+  const navigate = useNavigate(); // ✅ Added for programmatic navigation
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      navigate('/'); // Default: go to home
+    }
+  };
 
   const collections = [
     {
       id: 7,
       name: 'Explore All Designs',
+      slug: 'all-collections', // Added slug for URL
       description: 'Discover our complete range of heritage-inspired collections',
       imageUrl: ExploreAll,
       textTheme: 'dark',
-      isExploreAll: true // नया flag add करें
+      isExploreAll: true
     },
     {
       id: 1,
       name: 'Madhubani Collection',
+      slug: 'madhubani',
       description: 'Traditional folk art from Bihar, featuring intricate geometric patterns and vibrant colors',
       imageUrl: madhubaniImage,
       textTheme: 'dark'
@@ -258,6 +290,7 @@ export function CollectionsPage({
     {
       id: 5,
       name: 'Majestic Linen',
+      slug: 'majestic-linen',
       description: 'Premium linen crafted with heritage techniques, offering timeless comfort and elegance',
       imageUrl: Majestic,
       textTheme: 'dark'
@@ -265,6 +298,7 @@ export function CollectionsPage({
     {
       id: 2,
       name: 'Sujini Collection',
+      slug: 'sujini',
       description: 'Delicate running stitch embroidery creating beautiful quilted textures',
       imageUrl: sujiniImage,
       textTheme: 'dark'
@@ -272,6 +306,7 @@ export function CollectionsPage({
     {
       id: 3,
       name: 'Marble Collection',
+      slug: 'marble',
       description: 'Inspired by the timeless elegance of marble artistry and craftsmanship',
       imageUrl: Marble,
       textTheme: 'dark'
@@ -279,68 +314,55 @@ export function CollectionsPage({
     {
       id: 4,
       name: 'Nakashi Collection',
+      slug: 'nakashi',
       description: 'Exquisite hand-painted designs showcasing intricate artistic details',
       imageUrl: Nakasi,
       textTheme: 'dark'
     },
-    
     {
       id: 6,
       name: 'The Batik Archive',
+      slug: 'batik-archive',
       description: 'Ancient wax-resist dyeing tradition creating mesmerizing patterns and rich textures',
       imageUrl: Batik,
       textTheme: 'dark'
     },
-    
   ];
+  
 
-  const handleCollectionClick = (collectionName: string, isExploreAll = false) => {
-    setSelectedCollection({
-      name: isExploreAll ? 'All Collections' : collectionName,
-      showAllProducts: isExploreAll
-    });
-  };
-
-  const handleBackToCollections = () => {
-    setSelectedCollection(null);
-  };
-
-  // If a collection is selected, show the product page
-  if (selectedCollection) {
-    return (
-      <ProductPage
-        collectionName={selectedCollection.name}
-        showAllProducts={selectedCollection.showAllProducts}
-        onBack={handleBackToCollections}
-        cartCount={cartCount}
-        onCartClick={onCartClick}
-        onAddToCart={onAddToCart}
-        onCollectionClick={onCollectionClick}
-        onOurStoryClick={onOurStoryClick}
-        onCraftsmanshipClick={onCraftsmanshipClick}
-      />
-    );
+  // const getCollectionLink = (collection: any) => {
+  //   console.log("collname",collection.slug);
+  //   if (collection.isExploreAll) {
+      
+  //     return '/collection/men'; // या '/collections' अगर तूने gender specific नहीं बनाया है
+  //   }
+  //   return `/collection/${collection.slug}`;
+  //   // return `/collection/Madhubani` + `Collection`;
+  // };
+  const getCollectionLink = (collection: any) => {
+  if (collection.isExploreAll) {
+    return '/collections/men';   // ✅ plural
   }
+  return `/collections/${collection.slug}`;  // ✅ plural
+};
 
   return (
     <div className="min-h-screen bg-[#fdfcf9]">
       {/* Navigation */}
-      <div className="fixed top-0 left-0 right-0 z-40">
+      {/* <div className="fixed top-0 left-0 right-0 z-40">
         <Navigation 
           cartCount={cartCount} 
           onCartClick={onCartClick} 
           mode="light"
-          onCollectionClick={onCollectionClick}
-          onOurStoryClick={onOurStoryClick}
-          onCraftsmanshipClick={onCraftsmanshipClick}
+          onLogoClick={onLogoClick}
         />
-      </div>
+      </div> */}
 
       {/* Content */}
       <div className="relative pt-20 sm:pt-24 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 md:px-12 lg:px-20">
         {/* Back Button */}
         <button
-          onClick={onBack}
+          onClick={handleBack}
           className="flex items-center gap-2 text-[#2c1810] hover:text-[#c9a060] transition-colors mb-8 sm:mb-10 md:mb-12 font-['Cormorant_Garamond',serif] tracking-[1.5px] text-[10px] sm:text-[11px]"
           aria-label="Go back to home page"
         >
@@ -361,16 +383,11 @@ export function CollectionsPage({
         {/* Collections Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 md:gap-8 max-w-7xl mx-auto">
           {collections.map((collection) => (
-            <div
+            <Link
               key={collection.id}
-              className="group relative overflow-hidden bg-[#fdfcf9] rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105"
-              role="button"
-              tabIndex={0}
+              to={getCollectionLink(collection)}
+              className="group block relative overflow-hidden bg-[#fdfcf9] rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105"
               aria-label={`View ${collection.name}`}
-              onClick={() => handleCollectionClick(
-                collection.name, 
-                (collection as any).isExploreAll
-              )}
             >
               {/* Plain Background */}
               <div className="relative h-96 sm:h-[28rem] md:h-[32rem] overflow-hidden bg-[#f5f1e8]">
@@ -383,7 +400,7 @@ export function CollectionsPage({
                   />
                 )}
                 {/* Explore All के लिए special styling */}
-                {(collection as any).isExploreAll && (
+                {collection.isExploreAll && (
                   <div className="absolute inset-0 bg-gradient-to-tr from-[#f4d98a]/20 to-transparent" />
                 )}
                 {/* Corner Decorations */}
@@ -394,7 +411,7 @@ export function CollectionsPage({
               {/* Content */}
               <div className={`absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black/80 via-black/40 to-transparent backdrop-blur-sm text-[#fdfcf9]`}>
                 <h3 className={`text-[20px] sm:text-[22px] md:text-[24px] tracking-[1.5px] sm:tracking-[1.7px] md:tracking-[1.92px] mb-2 sm:mb-3 font-['Cinzel_Decorative',serif] transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${
-                  (collection as any).isExploreAll 
+                  collection.isExploreAll 
                     ? 'text-[#f4d98a]' 
                     : 'group-hover:text-[#f4d98a]'
                 }`}>
@@ -405,21 +422,23 @@ export function CollectionsPage({
                 </p>
                 <div className="mt-3 sm:mt-4 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
                   <span className="text-[10px] sm:text-[11px] tracking-[2px] border-b border-[#f4d98a] pb-1 font-['Cormorant_Garamond',serif] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                    {(collection as any).isExploreAll 
+                    {collection.isExploreAll 
                       ? 'EXPLORE ALL DESIGNS →' 
                       : 'VIEW COLLECTION →'
                     }
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
 
       {/* Footer */}
       <ExperienceFooterWrapper>
-        <Footer />
+        <Footer 
+          onHomeClick={onLogoClick}
+        />
       </ExperienceFooterWrapper>
     </div>
   );

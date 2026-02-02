@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, useReducedMotion } from 'motion/react';
 import mensImage from "figma:asset/eff662e72f54e2c0756f60c424c6ec0bf6ba26a6.png";
 import womensImage from "figma:asset/b0c850b0a2bf059396a4bc0e16dbc356969f9d3e.png";
+import { Link } from 'react-router-dom';
 
 interface CollectionSectionProps {
   onMensClick?: (event?: React.MouseEvent) => void;
@@ -75,12 +76,15 @@ export function CollectionSection({ onMensClick, onWomensClick }: CollectionSect
               <p className="text-white text-[11px] sm:text-[12px] md:text-[13px] leading-[1.9] tracking-[-0.076px] mb-8 sm:mb-10 md:mb-12 max-w-[280px] sm:max-w-[340px] md:max-w-[380px] mx-auto font-['Cormorant_Garamond',serif] transition-opacity duration-500 ease-in-out drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 Timeless kurtas, sherwanis, and heritage pieces crafted for the modern gentleman
               </p>
+              <Link to='/collections'>
               <button 
                 className="border-2 border-white text-white px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 md:py-3 text-[10px] tracking-[2.62px] transition-[background-color,color,border-color] duration-500 ease-in-out font-['Cormorant_Garamond',serif] relative overflow-hidden group-hover:bg-[#2c1810] group-hover:text-white group-hover:border-[#2c1810] pointer-events-auto rounded-[4px] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]" 
-                onClick={onMensClick}
+                // onClick={onMensClick}
               >
+                
                 <span className="relative z-10">EXPLORE COLLECTION →</span>
               </button>
+              </Link>
             </div>
           </div>
         </motion.div>
@@ -120,12 +124,14 @@ export function CollectionSection({ onMensClick, onWomensClick }: CollectionSect
               <p className="text-white text-[11px] sm:text-[12px] md:text-[13px] leading-[1.9] tracking-[-0.076px] mb-8 sm:mb-10 md:mb-12 max-w-[280px] sm:max-w-[340px] md:max-w-[348px] mx-auto font-['Cormorant_Garamond',serif] transition-all duration-250 ease-out drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 Exquisite sarees, lehengas, and handwoven masterpieces celebrating feminine elegance
               </p>
+              <Link to='/collections/women'>
               <button 
                 className="border-2 border-white text-white px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 md:py-3 text-[10px] tracking-[2.62px] transition-all duration-250 ease-out font-['Cormorant_Garamond',serif] relative overflow-hidden group-hover:bg-[#2c1810] group-hover:text-white group-hover:border-[#2c1810] pointer-events-auto rounded-[4px] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]" 
-                onClick={onWomensClick}
+                // onClick={onWomensClick}
               >
                 <span className="relative z-10">EXPLORE COLLECTION →</span>
               </button>
+              </Link>
             </div>
           </div>
         </motion.div>

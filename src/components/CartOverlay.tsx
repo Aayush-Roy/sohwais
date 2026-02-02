@@ -396,6 +396,7 @@
 // }
 import { X, Minus, Plus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { CartItem } from './ProductDetailPage';
+import { useNavigate } from 'react-router-dom';
 
 interface CartOverlayProps {
   isOpen: boolean;
@@ -417,6 +418,7 @@ export function CartOverlay({
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 0 ? (subtotal > 2999 ? 0 : 99) : 0;
   const total = subtotal;
+  const navigate = useNavigate();
 
   const handleProceedToCheckout = () => {
     onClose(); // Close cart overlay
@@ -426,13 +428,18 @@ export function CartOverlay({
   return (
     <>
       {/* Backdrop */}
-      {isOpen && (
+      {/* {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-50 transition-opacity"
           onClick={onClose}
         />
-      )}
-
+      )} */}
+      {isOpen && (
+  <div
+    className="fixed inset-0 bg-black/50 z-40 transition-opacity"
+    onClick={onClose}
+  />
+)}
       {/* Cart Overlay */}
       <div
         className={`fixed top-0 right-0 h-full w-full sm:w-[420px] md:w-[480px] bg-[#fdfcf9] shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
@@ -441,20 +448,24 @@ export function CartOverlay({
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-[#2c1810]/10">
+         
           <h2 className="text-[20px] sm:text-[24px] tracking-[1.5px] sm:tracking-[2px] font-['Cinzel_Decorative',serif] text-[#2c1810]">
             Shopping Cart
           </h2>
+          
+        </div>
+
+        {/* Cart Items */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 h-[calc(100vh-320px)] sm:h-[calc(100vh-280px)]">
           <button
             onClick={onClose}
+            // 
             className="text-[#2c1810] hover:text-[#c9a060] transition-colors"
             aria-label="Close cart"
           >
             <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
-        </div>
-
-        {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 h-[calc(100vh-320px)] sm:h-[calc(100vh-280px)]">
+         
           {cartItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <ShoppingBag className="w-12 h-12 sm:w-16 sm:h-16 text-[#2c1810]/20 mb-4" />
