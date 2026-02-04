@@ -944,8 +944,281 @@
 //   );
 // }
 
+// import { ShoppingCart, Menu, X } from 'lucide-react';
+// import { useState, useEffect } from 'react';
+// import { Link, useNavigate, useLocation } from 'react-router-dom';
+// import { AnimatePresence, motion } from 'motion/react';
+// import logoImage from "figma:asset/a02147a5b2d7cc9c47ba0dd78dff86bc3675223a.png";
+
+// interface NavigationProps {
+//   cartCount?: number;
+//   onCartClick?: () => void;
+//   mode?: 'auto' | 'light' | 'dark';
+//   enhancedContrast?: boolean;
+//   onLogoClick?: () => void;
+// }
+
+// export function Navigation({ 
+//   cartCount = 0, 
+//   onCartClick, 
+//   mode = 'auto', 
+//   enhancedContrast = false,
+//   onLogoClick
+// }: NavigationProps) {
+//   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+//   const [isOverDarkBackground, setIsOverDarkBackground] = useState(true);
+//   const navigate = useNavigate();
+//   const location = useLocation();
+
+//   useEffect(() => {
+//     if (mode !== 'auto') {
+//       setIsOverDarkBackground(mode === 'dark');
+//       return;
+//     }
+
+//     const handleScroll = () => {
+//       const scrollPosition = window.scrollY;
+//       const viewportHeight = window.innerHeight;
+//       const heroHeight = window.innerWidth < 768 ? viewportHeight * 0.75 : viewportHeight;
+      
+//       setIsOverDarkBackground(scrollPosition < heroHeight * 0.4);
+//     };
+
+//     handleScroll();
+//     window.addEventListener('scroll', handleScroll);
+//     return () => window.removeEventListener('scroll', handleScroll);
+//   }, [mode]);
+
+//   const handleLogoClick = (e: React.MouseEvent) => {
+//     e.preventDefault();
+    
+//     if (onLogoClick) {
+//       onLogoClick();
+//     } else {
+//       navigate('/');
+//       window.scrollTo({ top: 0, behavior: 'smooth' });
+//     }
+    
+//     setIsMobileMenuOpen(false);
+//   };
+
+//   const handleNavigation = (path: string) => {
+//     navigate(path);
+//     setIsMobileMenuOpen(false);
+//     window.scrollTo({ top: 0, behavior: 'smooth' });
+//   };
+
+//   const isActive = (path: string) => {
+//     return location.pathname === path || 
+//            (path === '/collections' && location.pathname.includes('/collections'));
+//   };
+
+//   // SIMPLIFIED: Dark bg = white text, Light bg = primary color
+//   const getLinkStyle = (path: string) => {
+//     const active = isActive(path);
+    
+//     if (active) {
+//       return {
+//         base: 'text-[#c9a060] drop-shadow-[0_0_8px_rgba(201,160,96,0.6)]',
+//         underline: 'after:w-full',
+//         focus: 'focus:ring-[#c9a060]'
+//       };
+//     }
+
+//     return {
+//       base: isOverDarkBackground ? 'text-white hover:text-[#f5e6c8]' : 'text-[#c9a060] hover:text-[#3d2817]',
+//       underline: 'after:w-0 hover:after:w-full',
+//       focus: isOverDarkBackground ? 'focus:ring-white' : 'focus:ring-[#c9a060]'
+//     };
+//   };
+
+//   const getCartStyle = () => {
+//     return isOverDarkBackground
+//       ? 'text-white hover:text-[#f5e6c8] focus:ring-white hover:drop-shadow-[0_0_8px_rgba(245,230,200,0.6)]'
+//       : 'text-[#c9a060] hover:text-[#3d2817] focus:ring-[#c9a060] hover:drop-shadow-[0_0_8px_rgba(201,160,96,0.6)]';
+//   };
+
+//   const getMobileLinkStyle = (path: string) => {
+//     const active = isActive(path);
+    
+//     if (active) {
+//       return 'text-[#c9a060]';
+//     }
+    
+//     return isOverDarkBackground 
+//       ? 'text-white hover:text-[#f5e6c8]' 
+//       : 'text-[#c9a060] hover:text-[#3d2817]';
+//   };
+
+//   return (
+//     <nav className="relative z-50">
+//       <div className={`max-w-[1080px] mx-4 mt-1 px-6 sm:px-8 md:px-10 py-4 md:py-5 flex items-center justify-between backdrop-blur-xl rounded-2xl border transition-all duration-300 mx-auto ${
+//         enhancedContrast 
+//           ? 'bg-white/90 border-[#2c1810]/30 shadow-[0_8px_32px_0_rgba(44,24,16,0.4)]'
+//           : isOverDarkBackground 
+//             ? 'bg-white/10 border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]' 
+//             : 'bg-[#2c1810]/10 border-[#2c1810]/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
+//       }`}>
+//         {/* Logo */}
+//         <button 
+//           onClick={handleLogoClick}
+//           className="focus:outline-none focus:ring-2 focus:ring-[#c9a060] focus:ring-offset-2 focus:ring-offset-transparent rounded-md transition-all hover:opacity-80"
+//           aria-label="Sohwais Threads Home"
+//         >
+//           <img 
+//             src={logoImage} 
+//             alt="Sohwais Threads Logo" 
+//             className="h-8 sm:h-10 md:h-12 w-auto rounded-md"
+//           />
+//         </button>
+        
+//         {/* Desktop Navigation */}
+//         <div className="hidden md:flex items-center gap-6 lg:gap-8">
+//           <nav aria-label="Main navigation">
+//             <div className="flex gap-8 lg:gap-12 items-center" role="list">
+//               <Link 
+//                 to="/collections"
+//                 className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] drop-shadow-md after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/collections').underline} ${getLinkStyle('/collections').base} ${getLinkStyle('/collections').focus}`}
+//                 role="listitem"
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//               >
+//                 COLLECTION
+//               </Link>
+              
+//               <Link 
+//                 to="/our-story"
+//                 className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] drop-shadow-md after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/our-story').underline} ${getLinkStyle('/our-story').base} ${getLinkStyle('/our-story').focus}`}
+//                 role="listitem"
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//               >
+//                 ABOUT
+//               </Link>
+              
+//               <Link 
+//                 to="/craftsmanship"
+//                 className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] drop-shadow-md after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/craftsmanship').underline} ${getLinkStyle('/craftsmanship').base} ${getLinkStyle('/craftsmanship').focus}`}
+//                 role="listitem"
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//               >
+//                 CRAFTSMANSHIP
+//               </Link>
+//             </div>
+//           </nav>
+          
+//           {/* Cart Icon */}
+//           {onCartClick && (
+//             <button
+//               onClick={onCartClick}
+//               className={`relative transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded p-2 drop-shadow-md ${getCartStyle()}`}
+//               aria-label={`Shopping cart with ${cartCount} items`}
+//             >
+//               <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6" />
+//               {cartCount > 0 && (
+//                 <span className="absolute -top-1 -right-1 bg-[#c9a060] text-white text-[10px] font-['Cormorant_Garamond',serif] rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
+//                   {cartCount > 9 ? '9+' : cartCount}
+//                 </span>
+//               )}
+//             </button>
+//           )}
+//         </div>
+
+//         {/* Mobile Menu Button and Cart */}
+//         <div className="flex md:hidden items-center gap-2 sm:gap-4">
+//           {onCartClick && (
+//             <button
+//               onClick={onCartClick}
+//               className={`relative transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded p-2 drop-shadow-md ${getCartStyle()}`}
+//               aria-label={`Shopping cart with ${cartCount} items`}
+//             >
+//               <ShoppingCart className="w-5 h-5" />
+//               {cartCount > 0 && (
+//                 <span className="absolute -top-1 -right-1 bg-[#c9a060] text-white text-[9px] font-['Cormorant_Garamond',serif] rounded-full w-4 h-4 flex items-center justify-center shadow-lg">
+//                   {cartCount > 9 ? '9+' : cartCount}
+//                 </span>
+//               )}
+//             </button>
+//           )}
+//           <button
+//             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+//             className={`transition-colors focus:outline-none focus:ring-2 rounded p-2 drop-shadow-md ${
+//               isOverDarkBackground
+//                 ? 'text-white hover:text-[#f5e6c8] focus:ring-white'
+//                 : 'text-[#c9a060] hover:text-[#3d2817] focus:ring-[#c9a060]'
+//             }`}
+//             aria-label="Toggle menu"
+//           >
+//             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Mobile Menu */}
+//       <AnimatePresence>
+//         {isMobileMenuOpen && (
+//           <motion.div
+//             initial={{ opacity: 0, height: 0 }}
+//             animate={{ opacity: 1, height: 'auto' }}
+//             exit={{ opacity: 0, height: 0 }}
+//             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+//             className={`md:hidden max-w-[1080px] mx-4 mt-2 overflow-hidden backdrop-blur-xl rounded-2xl border mx-auto ${
+//               enhancedContrast
+//                 ? 'bg-white/90 border-[#2c1810]/30 shadow-[0_8px_32px_0_rgba(44,24,16,0.4)]'
+//                 : isOverDarkBackground
+//                   ? 'bg-white/10 border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
+//                   : 'bg-[#2c1810]/10 border-[#2c1810]/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
+//             }`}
+//           >
+//             <nav aria-label="Mobile navigation" className="px-6 sm:px-8 py-6">
+//               <motion.div 
+//                 initial={{ opacity: 0 }}
+//                 animate={{ opacity: 1 }}
+//                 exit={{ opacity: 0 }}
+//                 transition={{ delay: 0.1, duration: 0.2 }}
+//                 className="flex flex-col gap-1"
+//               >
+//                 <Link 
+//                   to="/collections"
+//                   className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:backdrop-blur-sm hover:bg-opacity-20 ${
+//                     isOverDarkBackground
+//                       ? `hover:bg-white/10 ${getMobileLinkStyle('/collections')}`
+//                       : `hover:bg-[#2c1810]/10 ${getMobileLinkStyle('/collections')}`
+//                   }`}
+//                   onClick={() => setIsMobileMenuOpen(false)}
+//                 >
+//                   COLLECTION
+//                 </Link>
+//                 <Link 
+//                   to="/our-story"
+//                   className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:backdrop-blur-sm hover:bg-opacity-20 ${
+//                     isOverDarkBackground
+//                       ? `hover:bg-white/10 ${getMobileLinkStyle('/our-story')}`
+//                       : `hover:bg-[#2c1810]/10 ${getMobileLinkStyle('/our-story')}`
+//                   }`}
+//                   onClick={() => setIsMobileMenuOpen(false)}
+//                 >
+//                   ABOUT
+//                 </Link>
+//                 <Link 
+//                   to="/craftsmanship"
+//                   className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:backdrop-blur-sm hover:bg-opacity-20 ${
+//                     isOverDarkBackground
+//                       ? `hover:bg-white/10 ${getMobileLinkStyle('/craftsmanship')}`
+//                       : `hover:bg-[#2c1810]/10 ${getMobileLinkStyle('/craftsmanship')}`
+//                   }`}
+//                   onClick={() => setIsMobileMenuOpen(false)}
+//                 >
+//                   CRAFTSMANSHIP
+//                 </Link>
+//               </motion.div>
+//             </nav>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </nav>
+//   );
+// }
 import { ShoppingCart, Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import logoImage from "figma:asset/a02147a5b2d7cc9c47ba0dd78dff86bc3675223a.png";
@@ -966,28 +1239,8 @@ export function Navigation({
   onLogoClick
 }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isOverDarkBackground, setIsOverDarkBackground] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    if (mode !== 'auto') {
-      setIsOverDarkBackground(mode === 'dark');
-      return;
-    }
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const viewportHeight = window.innerHeight;
-      const heroHeight = window.innerWidth < 768 ? viewportHeight * 0.75 : viewportHeight;
-      
-      setIsOverDarkBackground(scrollPosition < heroHeight * 0.4);
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [mode]);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -1013,7 +1266,6 @@ export function Navigation({
            (path === '/collections' && location.pathname.includes('/collections'));
   };
 
-  // SIMPLIFIED: Dark bg = white text, Light bg = primary color
   const getLinkStyle = (path: string) => {
     const active = isActive(path);
     
@@ -1026,39 +1278,43 @@ export function Navigation({
     }
 
     return {
-      base: isOverDarkBackground ? 'text-white hover:text-[#f5e6c8]' : 'text-[#c9a060] hover:text-[#3d2817]',
+      base: 'text-[#3d2817] hover:text-[#c9a060]',
       underline: 'after:w-0 hover:after:w-full',
-      focus: isOverDarkBackground ? 'focus:ring-white' : 'focus:ring-[#c9a060]'
+      focus: 'focus:ring-[#c9a060]'
     };
   };
 
   const getCartStyle = () => {
-    return isOverDarkBackground
-      ? 'text-white hover:text-[#f5e6c8] focus:ring-white hover:drop-shadow-[0_0_8px_rgba(245,230,200,0.6)]'
-      : 'text-[#c9a060] hover:text-[#3d2817] focus:ring-[#c9a060] hover:drop-shadow-[0_0_8px_rgba(201,160,96,0.6)]';
+    return 'text-[#3d2817] hover:text-[#c9a060] focus:ring-[#c9a060] hover:drop-shadow-[0_0_8px_rgba(201,160,96,0.6)]';
   };
 
   const getMobileLinkStyle = (path: string) => {
     const active = isActive(path);
     
     if (active) {
-      return 'text-[#c9a060]';
+      return 'text-[#c9a060] font-semibold';
     }
     
-    return isOverDarkBackground 
-      ? 'text-white hover:text-[#f5e6c8]' 
-      : 'text-[#c9a060] hover:text-[#3d2817]';
+    return 'text-[#3d2817] hover:text-[#c9a060]';
+  };
+
+  const getNavbarBackground = () => {
+    if (enhancedContrast) {
+      return 'bg-white/85 border-[#2c1810]/15 shadow-[0_8px_20px_0_rgba(44,24,16,0.12)] backdrop-blur-md';
+    }
+    return 'bg-white/70 border-[#2c1810]/10 shadow-[0_4px_16px_0_rgba(0,0,0,0.08)] backdrop-blur-sm';
+  };
+
+  const getMobileMenuBackground = () => {
+    if (enhancedContrast) {
+      return 'bg-white/90 border-[#2c1810]/15 shadow-[0_8px_24px_0_rgba(44,24,16,0.15)] backdrop-blur-md';
+    }
+    return 'bg-white/80 border-[#2c1810]/10 shadow-[0_6px_20px_0_rgba(0,0,0,0.1)] backdrop-blur-sm';
   };
 
   return (
     <nav className="relative z-50">
-      <div className={`max-w-[1080px] mx-4 mt-1 px-6 sm:px-8 md:px-10 py-4 md:py-5 flex items-center justify-between backdrop-blur-xl rounded-2xl border transition-all duration-300 mx-auto ${
-        enhancedContrast 
-          ? 'bg-white/90 border-[#2c1810]/30 shadow-[0_8px_32px_0_rgba(44,24,16,0.4)]'
-          : isOverDarkBackground 
-            ? 'bg-white/10 border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]' 
-            : 'bg-[#2c1810]/10 border-[#2c1810]/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
-      }`}>
+      <div className={`max-w-[1080px] mx-4 mt-1 px-6 sm:px-8 md:px-10 py-4 md:py-5 flex items-center justify-between rounded-2xl border transition-all duration-300 mx-auto ${getNavbarBackground()}`}>
         {/* Logo */}
         <button 
           onClick={handleLogoClick}
@@ -1078,7 +1334,7 @@ export function Navigation({
             <div className="flex gap-8 lg:gap-12 items-center" role="list">
               <Link 
                 to="/collections"
-                className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] drop-shadow-md after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/collections').underline} ${getLinkStyle('/collections').base} ${getLinkStyle('/collections').focus}`}
+                className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/collections').underline} ${getLinkStyle('/collections').base} ${getLinkStyle('/collections').focus}`}
                 role="listitem"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -1087,7 +1343,7 @@ export function Navigation({
               
               <Link 
                 to="/our-story"
-                className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] drop-shadow-md after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/our-story').underline} ${getLinkStyle('/our-story').base} ${getLinkStyle('/our-story').focus}`}
+                className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/our-story').underline} ${getLinkStyle('/our-story').base} ${getLinkStyle('/our-story').focus}`}
                 role="listitem"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -1096,7 +1352,7 @@ export function Navigation({
               
               <Link 
                 to="/craftsmanship"
-                className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] drop-shadow-md after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/craftsmanship').underline} ${getLinkStyle('/craftsmanship').base} ${getLinkStyle('/craftsmanship').focus}`}
+                className={`relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent rounded px-2 py-1 transition-all tracking-[2px] text-[10px] font-['Cormorant_Garamond',serif] after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-gradient-to-r after:transition-all after:duration-300 after:from-[#c9a060] after:to-[#d4af69] ${getLinkStyle('/craftsmanship').underline} ${getLinkStyle('/craftsmanship').base} ${getLinkStyle('/craftsmanship').focus}`}
                 role="listitem"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -1109,12 +1365,12 @@ export function Navigation({
           {onCartClick && (
             <button
               onClick={onCartClick}
-              className={`relative transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded p-2 drop-shadow-md ${getCartStyle()}`}
+              className={`relative transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded p-2 ${getCartStyle()}`}
               aria-label={`Shopping cart with ${cartCount} items`}
             >
               <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#c9a060] text-white text-[10px] font-['Cormorant_Garamond',serif] rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
+                <span className="absolute -top-1 -right-1 bg-[#c9a060] text-white text-[10px] font-['Cormorant_Garamond',serif] rounded-full w-5 h-5 flex items-center justify-center shadow-sm">
                   {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
@@ -1127,12 +1383,12 @@ export function Navigation({
           {onCartClick && (
             <button
               onClick={onCartClick}
-              className={`relative transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded p-2 drop-shadow-md ${getCartStyle()}`}
+              className={`relative transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded p-2 ${getCartStyle()}`}
               aria-label={`Shopping cart with ${cartCount} items`}
             >
               <ShoppingCart className="w-5 h-5" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#c9a060] text-white text-[9px] font-['Cormorant_Garamond',serif] rounded-full w-4 h-4 flex items-center justify-center shadow-lg">
+                <span className="absolute -top-1 -right-1 bg-[#c9a060] text-white text-[9px] font-['Cormorant_Garamond',serif] rounded-full w-4 h-4 flex items-center justify-center shadow-sm">
                   {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
@@ -1140,11 +1396,7 @@ export function Navigation({
           )}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`transition-colors focus:outline-none focus:ring-2 rounded p-2 drop-shadow-md ${
-              isOverDarkBackground
-                ? 'text-white hover:text-[#f5e6c8] focus:ring-white'
-                : 'text-[#c9a060] hover:text-[#3d2817] focus:ring-[#c9a060]'
-            }`}
+            className="text-[#3d2817] hover:text-[#c9a060] focus:outline-none focus:ring-2 focus:ring-[#c9a060] rounded p-2 transition-colors"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -1160,13 +1412,7 @@ export function Navigation({
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className={`md:hidden max-w-[1080px] mx-4 mt-2 overflow-hidden backdrop-blur-xl rounded-2xl border mx-auto ${
-              enhancedContrast
-                ? 'bg-white/90 border-[#2c1810]/30 shadow-[0_8px_32px_0_rgba(44,24,16,0.4)]'
-                : isOverDarkBackground
-                  ? 'bg-white/10 border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
-                  : 'bg-[#2c1810]/10 border-[#2c1810]/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
-            }`}
+            className={`md:hidden max-w-[1080px] mx-4 mt-2 overflow-hidden rounded-2xl border mx-auto ${getMobileMenuBackground()}`}
           >
             <nav aria-label="Mobile navigation" className="px-6 sm:px-8 py-6">
               <motion.div 
@@ -1178,33 +1424,21 @@ export function Navigation({
               >
                 <Link 
                   to="/collections"
-                  className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:backdrop-blur-sm hover:bg-opacity-20 ${
-                    isOverDarkBackground
-                      ? `hover:bg-white/10 ${getMobileLinkStyle('/collections')}`
-                      : `hover:bg-[#2c1810]/10 ${getMobileLinkStyle('/collections')}`
-                  }`}
+                  className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:bg-white/40 ${getMobileLinkStyle('/collections')}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   COLLECTION
                 </Link>
                 <Link 
                   to="/our-story"
-                  className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:backdrop-blur-sm hover:bg-opacity-20 ${
-                    isOverDarkBackground
-                      ? `hover:bg-white/10 ${getMobileLinkStyle('/our-story')}`
-                      : `hover:bg-[#2c1810]/10 ${getMobileLinkStyle('/our-story')}`
-                  }`}
+                  className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:bg-white/40 ${getMobileLinkStyle('/our-story')}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   ABOUT
                 </Link>
                 <Link 
                   to="/craftsmanship"
-                  className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:backdrop-blur-sm hover:bg-opacity-20 ${
-                    isOverDarkBackground
-                      ? `hover:bg-white/10 ${getMobileLinkStyle('/craftsmanship')}`
-                      : `hover:bg-[#2c1810]/10 ${getMobileLinkStyle('/craftsmanship')}`
-                  }`}
+                  className={`transition-all tracking-[2px] text-[11px] font-['Cormorant_Garamond',serif] py-3 px-4 text-left rounded-lg hover:bg-white/40 ${getMobileLinkStyle('/craftsmanship')}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   CRAFTSMANSHIP

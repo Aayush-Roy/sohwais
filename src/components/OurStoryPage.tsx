@@ -29,7 +29,7 @@ export function OurStoryPage({ onBack, cartCount, onCartClick, onOurStoryClick, 
   const heroY = useTransform(heroScrollProgress, [0, 1], ["0%", "30%"]);
 
   return (
-    <div className="min-h-screen bg-[#1a1410] overflow-x-hidden">
+    <div className="min-h-screen bg-[#1a1410] overflow-x-hidden pt-15">
       {/* Navigation */}
      
 
